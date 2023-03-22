@@ -17,7 +17,6 @@ SetupWebPage::AddModule(
 		//
 		'dependencies' => array(
 			'itop-config-mgmt/2.7.0',
-			'itop-service-mgmt/2.7.0|itop-service-mgmt-provider/2.7.0',
 		),
 		'mandatory' => false,
 		'visible' => true,
