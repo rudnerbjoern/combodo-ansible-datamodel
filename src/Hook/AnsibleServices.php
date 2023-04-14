@@ -38,7 +38,11 @@ class AnsibleServices implements iRestServiceProvider
 		);
 		$aOps[] = array(
 			'verb' => 'ansible/get_inventory',
-			'description' => 'Get the Ansible inventory'
+			'description' => 'Get the inventory of an Ansible application'
+		);
+		$aOps[] = array(
+			'verb' => 'ansible/get_hosts_by_oql',
+			'description' => 'Get a list of hosts for an the Ansible application'
 		);
 
 		return $aOps;
@@ -62,27 +66,62 @@ class AnsibleServices implements iRestServiceProvider
 		switch ($sVerb) {
 			case 'ansible/get_webservices_version':
 				$oResult = new RestResult();
-				$oResult->message = "Running version of the iTop WEB services dedicated to Ansible is: ".static::ANSIBLE_SERVICES_VERSION;
+				$oResult->message = 'Running version of the iTop WEB services dedicated to Ansible is: '.static::ANSIBLE_SERVICES_VERSION;
 				break;
 
 			case 'ansible/get_inventory':
 				$oResult = new RestResultWithTextFile();
+				// Check user rights
 				if (UserRights::IsActionAllowed('Ansible', UR_ACTION_READ) != UR_ALLOWED_YES) {
 					$oResult->code = RestResult::UNAUTHORIZED;
-					$oResult->message = "The current user does not have enough permissions to read Ansible data.";
+					$oResult->message = 'The current user does not have enough permissions to read Ansible data.';
+					break;
+				}
+
+				// Check that a valid Ansible application has been given
+				$sUUID = RestUtils::GetMandatoryParam($aParams, 'uuid');
+				$sOQL = "SELECT Ansible AS a WHERE a.uuid = :uuid";
+				$oAnsibleSet =  new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('uuid' => $sUUID));
+				if ($oAnsible = $oAnsibleSet->Fetch()) {
+					// Compute inventory
+					$sInventory = RestUtils::GetMandatoryParam($aParams, 'inventory');
+					$sFormat = RestUtils::GetMandatoryParam($aParams, 'format');
+					$sFormat = ($sFormat == 'yaml') ? 'yaml' : 'ini';
+					$sText = $oAnsible->GetInventoryFile($sInventory, $sFormat);
+					$oResult->AddObject(0, 'computed', $oAnsible, $sText);
+					$oResult->message = "Found 1 Ansible application";
 				} else {
-					$sUUID = RestUtils::GetMandatoryParam($aParams, 'uuid');
-					$sOQL = "SELECT Ansible AS a WHERE a.uuid = :uuid";
-					$oAnsibleSet =  new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('uuid' => $sUUID));
-					if ($oAnsible = $oAnsibleSet->Fetch()) {
-						$sInventory = RestUtils::GetMandatoryParam($aParams, 'inventory');
-						$sFormat = RestUtils::GetMandatoryParam($aParams, 'format');
-						$sFormat = ($sFormat == 'yaml') ? 'yaml' : 'ini';
-						$sText = $oAnsible->GetInventoryFile($sInventory, $sFormat);
-						$oResult->AddObject(0, 'computed', $oAnsible, $sText);
+					$oResult->message = "No Ansible application found";
+				}
+				break;
+
+			case 'ansible/get_hosts_by_oql':
+				$oResult = new RestResultWithTextFile();
+				// Check user rights
+				if (UserRights::IsActionAllowed('Ansible', UR_ACTION_READ) != UR_ALLOWED_YES) {
+					$oResult->code = RestResult::UNAUTHORIZED;
+					$oResult->message = 'The current user does not have enough permissions to read Ansible data.';
+					break;
+				}
+
+				// Check that a valid Ansible application has been given
+				$sUUID = RestUtils::GetMandatoryParam($aParams, 'uuid');
+				$sOQL = "SELECT Ansible AS a WHERE a.uuid = :uuid";
+				$oAnsibleSet =  new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('uuid' => $sUUID));
+				if ($oAnsible = $oAnsibleSet->Fetch()) {
+					$sInventaryOQL = RestUtils::GetMandatoryParam($aParams, 'oql');
+					$sAttribute = RestUtils::GetOptionalParam($aParams, 'attribute', 'name');
+					list ($sHostList, $iNbCIs, $sError) = $oAnsible->GetHostsListFromOQL($sInventaryOQL, $sAttribute);
+					if ($sError != '') {
+						$oResult->code = RestResult::INTERNAL_ERROR;
+						$oResult->message = $sError;
+					} else {
+						$oResult->AddObject(0, 'computed', $oAnsible, $sHostList);
+						$oResult->message = "Found: ".$iNbCIs.' CIs';
 					}
-					$oResult->message = "Found: ".$oAnsibleSet->Count();
-					}
+				} else {
+					$oResult->message = "No Ansible application found";
+				}
 				break;
 
 			default:
