@@ -11,6 +11,7 @@ use DBObjectSearch;
 use Exception;
 use FunctionalCI;
 use IssueLog;
+use MetaModel;
 
 class _Ansible extends FunctionalCI
 {
@@ -220,6 +221,8 @@ class _Ansible extends FunctionalCI
 		$sCiClass = $aOQLTerms[1];
 		if (!in_array($sCiClass, ['Server', 'VirtualMachine', 'ApplicationSolution'])) {
 			$sErrorMsg = 'The requested CI class "'.$sCiClass.'" is not a part of an Ansible inventory';
+		} elseif (!MetaModel::IsValidAttCode($sCiClass, $sAttribute)) {
+			$sErrorMsg = 'The requested attribute "'.$sAttribute.'" is not valid for the CI class "'.$sCiClass.'"';
 		} else {
 			// Get set of CIs attached to the Ansible application
 			$oAnsibleCiSet = $this->GetFunctionalCIs($sInventory);
@@ -232,8 +235,14 @@ class _Ansible extends FunctionalCI
 			}
 			$oHostSet = $oHostByOQLSet->CreateIntersect($oAnsibleCiSet);
 			$iNbCIs = $oHostSet->Count();
+			$bFirstHost = true;
 			while ($oHost = $oHostSet->Fetch()) {
-				$sHostList .= $oHost->GetName()."\n";
+				if ($bFirstHost) {
+					$bFirstHost = false;
+				} else {
+					$sHostList .= ',';
+				}
+				$sHostList .= $oHost->Get($sAttribute);
 			}
 		}
 
