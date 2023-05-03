@@ -86,7 +86,7 @@ class AnsibleServices implements iRestServiceProvider
 					// Compute inventory
 					$sInventory = RestUtils::GetMandatoryParam($aParams, 'inventory');
 					$sFormat = RestUtils::GetMandatoryParam($aParams, 'format');
-					$sFormat = ($sFormat == 'yaml') ? 'yaml' : 'ini';
+					$sFormat = ($sFormat == 'yml') ? 'yml' : 'ini';
 					$sText = $oAnsible->GetInventoryFile($sInventory, $sFormat);
 					$oResult->AddObject(0, 'computed', $oAnsible, $sText);
 					$oResult->message = "Found 1 Ansible application";

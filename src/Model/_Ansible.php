@@ -180,7 +180,7 @@ class _Ansible extends FunctionalCI
 
 		$sText = '';
 		switch ($sFormat) {
-			case 'yaml':
+			case 'yml':
 				$sText .= "all:\n";
 				$sText .= str_pad("", YAML_CHILDREN_SPACE)."children:\n";
 				$sText .= $this->GetYamlInventoryLevel($oParentInventoryGroupSet, YAML_CHILDREN_SPACE);
