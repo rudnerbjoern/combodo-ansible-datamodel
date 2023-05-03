@@ -21,7 +21,7 @@ use UserRights;
  */
 class AnsibleServices implements iRestServiceProvider
 {
-	const ANSIBLE_SERVICES_VERSION = 1.0;
+	const ANSIBLE_SERVICES_VERSION = '1.0';
 
 	/**
 	 * Enumerate services delivered by this class
