@@ -56,6 +56,8 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Class:AnsibleInventory/Attribute:description+' => '',
 	'Class:AnsibleInventory/Attribute:ansibleinventorygroups_list' => 'Inventory Groups',
 	'Class:AnsibleInventory/Attribute:ansibleinventorygroups_list+' => 'All the inventary groups that belong to the inventory',
+	'Class:AnsibleInventory/Tab:cis_list' => 'CI',
+	'Class:AnsibleInventory/Tab:cis_list+' => 'List of all CIs attached to an inventory group belonging to the inventory',
 ));
 
 //
@@ -79,8 +81,8 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Class:AnsibleInventoryGroup/Attribute:parent_name+' => '',
 	'Class:AnsibleInventoryGroup/Attribute:description' => 'Description',
 	'Class:AnsibleInventoryGroup/Attribute:description+' => '',
-	'Class:AnsibleInventoryGroup/Attribute:functionalcis_list' => 'Hosts',
-	'Class:AnsibleInventoryGroup/Attribute:functionalcis_list+' => 'All the hosts that belong to the group',
+	'Class:AnsibleInventoryGroup/Attribute:functionalcis_list' => 'CIs',
+	'Class:AnsibleInventoryGroup/Attribute:functionalcis_list+' => 'All the CIs that belong to the group',
 ));
 
 //
@@ -90,9 +92,9 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Class:lnkAnsibleInventoryGroupToFunctionalCI' => 'Link Ansible Inventory Group / Functional CI',
 	'Class:lnkAnsibleInventoryGroupToFunctionalCI+' => '',
 	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Name' => '%1$s / %2$s',
-	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:functionalci_id' => 'Host',
-	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:functionalci_id+' => 'Host or device that belongs to the group',
-	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:functionalci_name' => 'Host name',
+	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:functionalci_id' => 'CI',
+	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:functionalci_id+' => 'CI or host that belongs to the group',
+	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:functionalci_name' => 'CI name',
 	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:functionalci_name+' => '',
 	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:ansibleinventorygroup_id' => 'Inventory Group',
 	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:ansibleinventorygroup_id+' => '',
@@ -131,8 +133,8 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Class:AnsiblePlaybook/Attribute:duration+' => 'Execution time it took for the application',
 	'Class:AnsiblePlaybook/Attribute:script' => 'Script',
 	'Class:AnsiblePlaybook/Attribute:script+' => 'Script figuring the playbook',
-	'Class:AnsiblePlaybook/Attribute:functionalcis_list' => 'Hosts',
-	'Class:AnsiblePlaybook/Attribute:functionalcis_list+' => 'Set of hosts that the playbook get executed against to',
+	'Class:AnsiblePlaybook/Attribute:functionalcis_list' => 'CIs',
+	'Class:AnsiblePlaybook/Attribute:functionalcis_list+' => 'Set of CIs that the playbook get executed against to',
 ));
 
 //
@@ -142,16 +144,16 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Class:lnkAnsiblePlaybookToFunctionalCI' => 'Link Ansible Playbook / Functional CI',
 	'Class:lnkAnsiblePlaybookToFunctionalCI+' => '',
 	'Class:lnkAnsiblePlaybookToFunctionalCI/Name' => '%1$s / %2$s',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:functionalci_id' => 'Host',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:functionalci_id+' => 'Host or device against which the playbook will be executed',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:functionalci_name' => 'Host name',
+	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:functionalci_id' => 'CI',
+	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:functionalci_id+' => 'CI or host against which the playbook will be executed',
+	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:functionalci_name' => 'CI name',
 	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:functionalci_name+' => '',
 	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:ansibleplaybook_id' => 'Playbook',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:ansibleplaybook_id+' => 'Playbook that will be executed on the host',
+	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:ansibleplaybook_id+' => 'Playbook that will be executed on the CI',
 	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:ansibleplaybook_name' => 'Playbook name',
 	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:ansibleplaybook_name+' => '',
 	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:action' => 'Action',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:action+' => 'Defines when the playbook should be executed on the host',
+	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:action+' => 'Defines when the playbook should be executed on the CI',
 	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:action/Value:toschedule' => 'To schedule and execute',
 	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:action/Value:toschedule+' => '',
 	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:action/Value:toexecute' => 'To execute as soon as possible',
