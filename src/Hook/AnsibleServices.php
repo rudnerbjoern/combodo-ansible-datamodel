@@ -109,9 +109,10 @@ class AnsibleServices implements iRestServiceProvider
 				$sOQL = "SELECT Ansible AS a WHERE a.uuid = :uuid";
 				$oAnsibleSet =  new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('uuid' => $sUUID));
 				if ($oAnsible = $oAnsibleSet->Fetch()) {
-					$sInventaryOQL = RestUtils::GetMandatoryParam($aParams, 'oql');
+					$sInventory = RestUtils::GetMandatoryParam($aParams, 'inventory');
+					$sHostsOQL = RestUtils::GetMandatoryParam($aParams, 'oql');
 					$sAttribute = RestUtils::GetOptionalParam($aParams, 'attribute', 'name');
-					list ($sHostList, $iNbCIs, $sError) = $oAnsible->GetHostsListFromOQL($sInventaryOQL, $sAttribute);
+					list ($sHostList, $iNbCIs, $sError) = $oAnsible->GetHostsListFromOQL($sInventory, $sHostsOQL, $sAttribute);
 					if ($sError != '') {
 						$oResult->code = RestResult::INTERNAL_ERROR;
 						$oResult->message = $sError;

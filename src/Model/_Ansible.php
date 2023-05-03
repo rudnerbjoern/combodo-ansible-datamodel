@@ -63,10 +63,10 @@ class _Ansible extends FunctionalCI
 	 * @return CMDBObjectSet
 	 * @throws \OQLException
 	 */
-	private function GetFunctionalCIs ()
+	private function GetFunctionalCIs ($sInventory)
 	{
-		$sOQL = "SELECT FunctionalCI AS f JOIN lnkAnsibleInventoryGroupToFunctionalCI AS l ON l.functionalci_id = f.id JOIN AnsibleInventoryGroup AS g ON l.ansibleinventorygroup_id = g.id WHERE g.ansible_id = :id";
-		$oSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('id' => $this->GetKey()));
+		$sOQL = "SELECT FunctionalCI AS f JOIN lnkAnsibleInventoryGroupToFunctionalCI AS l ON l.functionalci_id = f.id JOIN AnsibleInventoryGroup AS g ON l.ansibleinventorygroup_id = g.id WHERE g.ansible_id = :id AND g.ansibleinventory_name = :name";
+		$oSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('id' => $this->GetKey(), 'name' => $sInventory));
 		return $oSet;
 	}
 
@@ -198,7 +198,8 @@ class _Ansible extends FunctionalCI
 	/**
 	 * Get the list of hosts from a given OQL
 	 *
-	 * @param $sInventaryOQL
+	 * @param $sInventory
+	 * @param $sOQL
 	 * @param $sAttribute
 	 * @return array
 	 * @throws \CoreException
@@ -208,24 +209,24 @@ class _Ansible extends FunctionalCI
 	 * @throws \MySQLHasGoneAwayException
 	 * @throws \OQLException
 	 */
-	public function GetHostsListFromOQL($sInventaryOQL, $sAttribute): array
+	public function GetHostsListFromOQL($sInventory, $sOQL, $sAttribute): array
 	{
 		$sHostList = '';
 		$iNbCIs = 0;
 		$sErrorMsg = '';
 
 		// Make sure correct class of CIs has been provided in OQL
-		$aOQLTerms =  explode(' ', $sInventaryOQL, 22);
+		$aOQLTerms =  explode(' ', $sOQL, 22);
 		$sCiClass = $aOQLTerms[1];
 		if (!in_array($sCiClass, ['Server', 'VirtualMachine', 'ApplicationSolution'])) {
 			$sErrorMsg = 'The requested CI class "'.$sCiClass.'" is not a part of an Ansible inventory';
 		} else {
 			// Get set of CIs attached to the Ansible application
-			$oAnsibleCiSet = $this->GetFunctionalCIs();
+			$oAnsibleCiSet = $this->GetFunctionalCIs($sInventory);
 
-			// Get set of CIs defined bu inventory OQL
+			// Get set of CIs defined by inventory OQL
 			try {
-				$oHostByOQLSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sInventaryOQL));
+				$oHostByOQLSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL));
 			} catch (Exception $e) {
 				IssueLog::Debug('Invalid OQL provided');
 			}
