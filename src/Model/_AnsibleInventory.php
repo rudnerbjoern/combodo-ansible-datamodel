@@ -8,13 +8,10 @@ namespace Combodo\iTop\Ansible\Model;
 
 use ApplicationContext;
 use cmdbAbstractObject;
-use CMDBObjectSet;
 use Combodo\iTop\Application\UI\Base\Layout\Object\ObjectFactory;
 use Combodo\iTop\Application\UI\Base\Layout\PageContent\PageContentFactory;
 use DBObjectSearch;
 use Dict;
-use Exception;
-use IssueLog;
 use iTopWebPage;
 use MenuBlock;
 use MetaModel;
