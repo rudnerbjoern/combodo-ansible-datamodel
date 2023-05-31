@@ -9,5 +9,6 @@ return array(
     'Combodo\\iTop\\Ansible\\Controller\\RestResultWithTextFile' => $baseDir . '/src/Controller/RestResultWithTextFile.php',
     'Combodo\\iTop\\Ansible\\Hook\\AnsibleServices' => $baseDir . '/src/Hook/AnsibleServices.php',
     'Combodo\\iTop\\Ansible\\Model\\_Ansible' => $baseDir . '/src/Model/_Ansible.php',
+    'Combodo\\iTop\\Ansible\\Model\\_AnsibleInventory' => $baseDir . '/src/Model/_AnsibleInventory.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
 );

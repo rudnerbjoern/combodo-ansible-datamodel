@@ -24,6 +24,7 @@ class ComposerStaticInitdb6b167b4f3d709c1dd19745b8879053
         'Combodo\\iTop\\Ansible\\Controller\\RestResultWithTextFile' => __DIR__ . '/../..' . '/src/Controller/RestResultWithTextFile.php',
         'Combodo\\iTop\\Ansible\\Hook\\AnsibleServices' => __DIR__ . '/../..' . '/src/Hook/AnsibleServices.php',
         'Combodo\\iTop\\Ansible\\Model\\_Ansible' => __DIR__ . '/../..' . '/src/Model/_Ansible.php',
+        'Combodo\\iTop\\Ansible\\Model\\_AnsibleInventory' => __DIR__ . '/../..' . '/src/Model/_AnsibleInventory.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 

@@ -287,6 +287,10 @@
     </class>
     <class id="AnsibleInventory" _delta="define">
       <parent>cmdbAbstractObject</parent>
+      <php_parent>
+        <name>Combodo\iTop\Ansible\Model\_AnsibleInventory</name>
+        <file>src/Model/_AnsibleInventory.php</file>
+      </php_parent>
       <properties>
         <category>bizmodel,searchable</category>
         <abstract>false</abstract>
@@ -1170,4 +1174,76 @@
     <constant id="YAML_HOSTS_SPACE" xsi:type="integer" _delta="define">4</constant>
     <constant id="YAML_CIS_SPACE" xsi:type="integer" _delta="define">6</constant>
   </constants>
+  <snippets>
+    <snippet id="CombodoAnsibleDatamodel" _delta="define">
+      <placement>module</placement>
+      <module>combodo-ansible-datamodel</module>
+      <rank>10</rank>
+      <content><![CDATA[
+/*******************************************************************************************
+ * Plugin to add menu items in the "popup" menus related to Ansible inventories
+ */
+class CombodoAnsibleDatamodelExtraMenus implements iPopupMenuExtension {
+	/**
+	 * @inheritdoc
+	 */
+	public static function EnumItems($iMenuId, $param) {
+		$aResult = array();
+		switch($iMenuId) {
+			case iPopupMenuExtension::MENU_OBJLIST_ACTIONS:	// $param is a DBObjectSet
+			case iPopupMenuExtension::MENU_OBJLIST_TOOLKIT: // $param is a DBObjectSet
+			    break;
+
+			case iPopupMenuExtension::MENU_OBJDETAILS_ACTIONS: // $param is a DBObject
+				$oObj = $param;
+
+				// Additional actions for IPAddress and IPSubnet
+				if ($oObj instanceof AnsibleInventory) {
+					// Additional actions for Zone
+					$aResult[] = new SeparatorPopupMenuItem();
+			  	    $oAppContext = new ApplicationContext();
+					$sContext = $oAppContext->GetForLink();
+
+					/** @var \AnsibleInventory $oObj */
+			  	    $id = $oObj->GetKey();
+					$sClass = get_class($oObj);
+
+					$aParams = $oAppContext->GetAsHash();
+			  	    $aParams['class'] = $sClass;
+					$aParams['id'] = $id;
+
+					$operation = utils::ReadParam('operation', '');
+					switch ($operation) {
+						case 'apply_new':
+						case 'apply_modify':
+						case 'details':
+							$aParams['operation'] = 'inventoryfiledisplay';
+							$aParams['format'] = 'ini';
+							$sMenu = 'UI:AnsibleInventory:Action:FileDisplay:Menu';
+							$aResult[] = new URLPopupMenuItem($sMenu, Dict::S($sMenu), utils::GetAbsoluteUrlModulePage('combodo-ansible-datamodel', 'ui.combodo-ansible-datamodel.php', $aParams));
+				            break;
+
+						case 'inventoryfiledisplay':
+							$sMenu = 'UI:AnsibleInventory:Action:Details:Menu';
+							$aResult[] = new URLPopupMenuItem($sMenu, Dict::S($sMenu), utils::GetAbsoluteUrlAppRoot()."pages/UI.php?operation=details&class=$sClass&id=$id&$sContext");
+						    break;
+
+						default:
+						    break;
+				    }
+			    }
+				break;
+
+            case iPopupMenuExtension::MENU_DASHBOARD_ACTIONS: // $param is a Dashboard
+				break;
+
+			default: // Unknown type of menu, do nothing
+				break;
+		}
+		return $aResult;
+	}
+}]]></content>
+
+    </snippet>
+  </snippets>
 </itop_design>

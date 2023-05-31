@@ -172,6 +172,12 @@ Dict::Add('EN US', 'English', 'English', array(
 Dict::Add('EN US', 'English', 'English', array(
 	'Menu:ConfigManagement:Ansible' => 'Ansible',
 	'Menu:Ansible:General' => 'General',
+	'UI:AnsibleInventory:Action:FileDisplay:Menu' => 'Display inventory file',
+	'UI:AnsibleInventory:Action:Details:Menu' => 'Details',
+	'UI:AnsibleInventory:Action:FileDisplay:PageTitle' => 'Inventory %1$s file',
+	'UI:AnsibleInventory:Action:FileDisplay:Title' => 'Inventory file',
+	'UI:AnsibleInventory:Action:FileDisplay:Format:ini' => 'Display inventory file in INI format',
+	'UI:AnsibleInventory:Action:FileDisplay:Format:yml' => 'Display inventory file in YML format',
 	'UI:AnsibleInventoryGroup:Action:New:lnkAnsibleInventoryGroupToFunctionalCI:WrongCIClass' => 'Only Servers, Virtual Machines and Application Solutions can be attached to an inventory group',
 	'UI:AnsiblePlaybook:Action:New:lnkAnsiblePlaybookToFunctionalCI:WrongCIClass' => 'Only Servers, Virtual Machines and Application Solutions can be attached to a playbook',
 ));
