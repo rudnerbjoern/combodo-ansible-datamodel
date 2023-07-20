@@ -96,7 +96,12 @@ class _Ansible extends FunctionalCI
 			if ($oLnkSet->CountExceeds(0)) {
 				$sText .= str_pad("", $sPadding + YAML_HOSTS_SPACE)."hosts:\n";
 				while ($oLnk = $oLnkSet->Fetch()) {
-					$sText .= str_pad("", $sPadding + YAML_CIS_SPACE).$oLnk->Get('functionalci_name').": {".$oLnk->Get('tag')."}\n";
+					$sTag = $oLnk->Get('tag');
+					if ($sTag != '') {
+						$sText .= str_pad("", $sPadding + YAML_CIS_SPACE).$oLnk->Get('functionalci_name').": {".$oLnk->Get('tag')."}\n";
+					} else {
+						$sText .= str_pad("", $sPadding + YAML_CIS_SPACE).$oLnk->Get('functionalci_name').":\n";
+					}
 				}
 			}
 
