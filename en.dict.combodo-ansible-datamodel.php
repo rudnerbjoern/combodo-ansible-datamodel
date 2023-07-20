@@ -27,16 +27,10 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Class:Ansible/Attribute:uuid+' => 'Universal Unique Identifier of the application',
 	'Class:Ansible/Attribute:functionalci_id' => 'CI',
 	'Class:Ansible/Attribute:functionalci_id+' => 'Functional CI hosting the application. It can be a server, a virtual machine or an application solution',
-	'Class:Ansible/Attribute:last_execution_date' => 'Last execution date',
-	'Class:Ansible/Attribute:last_execution_date+' => 'Date when the last run took place',
-	'Class:Ansible/Attribute:duration' => 'Duration',
-	'Class:Ansible/Attribute:duration+' => 'Execution time it took for the application',
 	'Class:Ansible/Attribute:ansibleinventories_list' => 'Inventories',
 	'Class:Ansible/Attribute:ansibleinventories_list+' => 'List of all inventories attached to the application',
 	'Class:Ansible/Attribute:ansibleinventorygroups_list' => 'Inventory groups',
 	'Class:Ansible/Attribute:ansibleinventorygroups_list+' => 'List of all inventory groups attached to the application',
-	'Class:Ansible/Attribute:playbooks_list' => 'Playbooks',
-	'Class:Ansible/Attribute:playbooks_list+' => 'List of all playbooks attached to the application',
 ));
 
 //
