@@ -56,7 +56,7 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Class:AnsibleInventory/Attribute:description+' => '',
 	'Class:AnsibleInventory/Attribute:ansibleinventorygroups_list' => 'Inventory Groups',
 	'Class:AnsibleInventory/Attribute:ansibleinventorygroups_list+' => 'All the inventary groups that belong to the inventory',
-	'Class:AnsibleInventory/Tab:cis_list' => 'CI',
+	'Class:AnsibleInventory/Tab:cis_list' => 'CIs',
 	'Class:AnsibleInventory/Tab:cis_list+' => 'List of all CIs attached to an inventory group belonging to the inventory',
 ));
 
@@ -105,68 +105,6 @@ Dict::Add('EN US', 'English', 'English', array(
 ));
 
 //
-// Class: AnsiblePlaybook
-//
-Dict::Add('EN US', 'English', 'English', array(
-	'Class:AnsiblePlaybook' => 'Ansible Playbook',
-	'Class:AnsiblePlaybook+' => '',
-	'Class:AnsiblePlaybook:baseinfo' => 'General Information',
-	'Class:AnsiblePlaybook:operation' => 'Operations',
-	'Class:AnsiblePlaybook:scriptinfo' => 'Script',
-	'Class:AnsiblePlaybook/Attribute:name' => 'Name',
-	'Class:AnsiblePlaybook/Attribute:name+' => 'Name of the Ansible playbook',
-	'Class:AnsiblePlaybook/Attribute:ansible_id' => 'Ansible Application',
-	'Class:AnsiblePlaybook/Attribute:ansible_id+' => 'Ansible application that the playbook belongs to',
-	'Class:AnsiblePlaybook/Attribute:org_id+' => 'Organization that the application belongs to',
-	'Class:AnsiblePlaybook/Attribute:status' => 'Status',
-	'Class:AnsiblePlaybook/Attribute:status+' => 'Operational status of the playbook',
-	'Class:AnsiblePlaybook/Attribute:status/Value:obsolete' => 'Obsolete',
-	'Class:AnsiblePlaybook/Attribute:status/Value:production' => 'Production',
-	'Class:AnsiblePlaybook/Attribute:status/Value:implementation' => 'Implementation',
-	'Class:AnsiblePlaybook/Attribute:recurrent' => 'Recurrent',
-	'Class:AnsiblePlaybook/Attribute:recurrent+' => 'Specifies if the playbook must be executed only once or regularly',
-	'Class:AnsiblePlaybook/Attribute:recurrent/Value:yes' => 'Yes',
-	'Class:AnsiblePlaybook/Attribute:recurrent/Value:no' => 'No',
-	'Class:AnsiblePlaybook/Attribute:last_execution_date' => 'Last execution date',
-	'Class:AnsiblePlaybook/Attribute:last_execution_date+' => 'Date when the last run took place',
-	'Class:AnsiblePlaybook/Attribute:duration' => 'Duration',
-	'Class:AnsiblePlaybook/Attribute:duration+' => 'Execution time it took for the application',
-	'Class:AnsiblePlaybook/Attribute:script' => 'Script',
-	'Class:AnsiblePlaybook/Attribute:script+' => 'Script figuring the playbook',
-	'Class:AnsiblePlaybook/Attribute:functionalcis_list' => 'CIs',
-	'Class:AnsiblePlaybook/Attribute:functionalcis_list+' => 'Set of CIs that the playbook get executed against to',
-));
-
-//
-// Class lnkAnsiblePlaybookToFunctionalCI
-//
-Dict::Add('EN US', 'English', 'English', array(
-	'Class:lnkAnsiblePlaybookToFunctionalCI' => 'Link Ansible Playbook / Functional CI',
-	'Class:lnkAnsiblePlaybookToFunctionalCI+' => '',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Name' => '%1$s / %2$s',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:functionalci_id' => 'CI',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:functionalci_id+' => 'CI or host against which the playbook will be executed',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:functionalci_name' => 'CI name',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:functionalci_name+' => '',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:ansibleplaybook_id' => 'Playbook',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:ansibleplaybook_id+' => 'Playbook that will be executed on the CI',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:ansibleplaybook_name' => 'Playbook name',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:ansibleplaybook_name+' => '',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:action' => 'Action',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:action+' => 'Defines when the playbook should be executed on the CI',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:action/Value:toschedule' => 'To schedule and execute',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:action/Value:toschedule+' => '',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:action/Value:toexecute' => 'To execute as soon as possible',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:action/Value:toexecute+' => '',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:status' => 'Status',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:status+' => 'Execution status provided by Ansible',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:status/Value:executed' => 'Executed',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:status/Value:executed+' => '',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:status/Value:failed' => 'Failed',
-	'Class:lnkAnsiblePlaybookToFunctionalCI/Attribute:status/Value:failed+' => '',
-));
-
-//
 // Menus and messages
 //
 Dict::Add('EN US', 'English', 'English', array(
@@ -179,6 +117,5 @@ Dict::Add('EN US', 'English', 'English', array(
 	'UI:AnsibleInventory:Action:FileDisplay:Format:ini' => 'Display inventory file in INI format',
 	'UI:AnsibleInventory:Action:FileDisplay:Format:yml' => 'Display inventory file in YML format',
 	'UI:AnsibleInventoryGroup:Action:New:lnkAnsibleInventoryGroupToFunctionalCI:WrongCIClass' => 'Only Servers, Virtual Machines and Application Solutions can be attached to an inventory group',
-	'UI:AnsiblePlaybook:Action:New:lnkAnsiblePlaybookToFunctionalCI:WrongCIClass' => 'Only Servers, Virtual Machines and Application Solutions can be attached to a playbook',
 ));
 
