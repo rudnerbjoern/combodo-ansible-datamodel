@@ -224,16 +224,20 @@ class _Ansible extends FunctionalCI
 		} elseif (!MetaModel::IsValidAttCode($sCiClass, $sAttribute)) {
 			$sErrorMsg = 'The requested attribute "'.$sAttribute.'" is not valid for the CI class "'.$sCiClass.'"';
 		} else {
-			// Get set of CIs attached to the Ansible application
-			$oAnsibleCiSet = $this->GetFunctionalCIs($sInventory);
-
 			// Get set of CIs defined by inventory OQL
 			try {
 				$oHostByOQLSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL));
 			} catch (Exception $e) {
 				IssueLog::Debug('Invalid OQL provided');
 			}
-			$oHostSet = $oHostByOQLSet->CreateIntersect($oAnsibleCiSet);
+
+			// Get set of CIs attached to the Ansible application
+			if ($sInventory != '') {
+				$oAnsibleCiSet = $this->GetFunctionalCIs($sInventory);
+				$oHostSet = $oHostByOQLSet->CreateIntersect($oAnsibleCiSet);
+			} else {
+				$oHostSet = $oHostByOQLSet;
+			}
 			$iNbCIs = $oHostSet->Count();
 			$bFirstHost = true;
 			while ($oHost = $oHostSet->Fetch()) {
