@@ -2,9 +2,12 @@
 
 ## About
 
-This extension allows you to integrate Ansible environments within iTop... TODO
+This extension allows you to integrate Ansible environment within iTop. It adds to your iTop datamodel classes of objects 
+that modelize Ansible inventories and provides dedicated web services to get them.
 
-For an optimal usage, this extension should be used with the "Data collector for Ansible" that will ... TODO.
+Together with the [Ansible playbooks for iTop](https://store.itophub.io/en_US/products/combodo-ansible-playbooks) package 
+that provides you with playbooks that embed iTop web services, you'll be able to automate the creation of Ansible 
+inventory files or ad-hoc lists of hosts for your playbooks.
 
 For more information about this module have a look at the
 corresponding [extension documentation](https://store.itophub.io/en_US/products/combodo-ansible-datamodel).
