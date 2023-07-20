@@ -71,18 +71,6 @@
           <extkey_attcode>functionalci_id</extkey_attcode>
           <target_attcode>name</target_attcode>
         </field>
-        <field id="last_execution_date" xsi:type="AttributeDateTime">
-          <sql>last_execution_date</sql>
-          <default_value/>
-          <is_null_allowed>true</is_null_allowed>
-          <tracking_level>none</tracking_level>
-        </field>
-        <field id="duration" xsi:type="AttributeDuration">
-          <sql>duration</sql>
-          <default_value/>
-          <is_null_allowed>true</is_null_allowed>
-          <tracking_level>none</tracking_level>
-        </field>
         <field id="ansibleinventories_list" xsi:type="AttributeLinkedSet">
           <linked_class>AnsibleInventory</linked_class>
           <ext_key_to_me>ansible_id</ext_key_to_me>
@@ -95,55 +83,8 @@
           <tracking_level/>
           <edit_mode>add_remove</edit_mode>
         </field>
-        <field id="playbooks_list" xsi:type="AttributeLinkedSet">
-          <linked_class>AnsiblePlaybook</linked_class>
-          <ext_key_to_me>ansible_id</ext_key_to_me>
-          <tracking_level/>
-          <edit_mode>add_remove</edit_mode>
-        </field>
       </fields>
-      <methods>
-        <method id="GetInitialStateAttributeFlags">
-          <comment/>
-          <static>false</static>
-          <access>public</access>
-          <type>Overload-cmdbAbstractObject</type>
-          <code><![CDATA[ public function GetInitialStateAttributeFlags($sAttCode, &$aReasons = array())
-	{
-	  $sFlagsFromParent = parent::GetInitialStateAttributeFlags($sAttCode, $aReasons);
-		switch ($sAttCode)
-		{
-			case 'last_discovery_date':
-			case 'duration':
-				return (OPT_ATT_READONLY | $sFlagsFromParent);
-
-			default:
-				break;
-		}
-		return $sFlagsFromParent;
-    }]]></code>
-        </method>
-        <method id="GetAttributeFlags">
-          <comment/>
-          <static>false</static>
-          <access>public</access>
-          <type>Overload-cmdbAbstractObject</type>
-          <code><![CDATA[ public function GetAttributeFlags($sAttCode, &$aReasons = array(), $sTargetState = '')
-	{
-	  $sFlagsFromParent = parent::GetAttributeFlags($sAttCode, $aReasons, $sTargetState);
-		switch ($sAttCode)
-		{
-			case 'last_discovery_date':
-			case 'duration':
-				return (OPT_ATT_READONLY | $sFlagsFromParent);
-
-			default:
-				break;
-		}
-		return $sFlagsFromParent;
-    }]]></code>
-        </method>
-      </methods>
+      <methods/>
       <presentation>
         <list>
           <items>
@@ -250,22 +191,6 @@
               </items>
               <rank>10</rank>
             </item>
-            <item id="col:col1">
-              <items>
-                <item id="fieldset:Class:Ansible:operation">
-                  <items>
-                    <item id="last_execution_date">
-                      <rank>20</rank>
-                    </item>
-                    <item id="duration">
-                      <rank>30</rank>
-                    </item>
-                  </items>
-                  <rank>10</rank>
-                </item>
-              </items>
-              <rank>20</rank>
-            </item>
             <item id="contacts_list">
               <rank>30</rank>
             </item>
@@ -277,9 +202,6 @@
             </item>
             <item id="ansibleinventorygroups_list">
               <rank>60</rank>
-            </item>
-            <item id="playbooks_list">
-              <rank>70</rank>
             </item>
           </items>
         </details>
@@ -417,14 +339,11 @@
       <presentation>
         <list>
           <items>
-            <item id="name">
+            <item id="ansible_id">
               <rank>10</rank>
             </item>
-            <item id="ansible_id">
-              <rank>20</rank>
-            </item>
             <item id="org_id">
-              <rank>30</rank>
+              <rank>20</rank>
             </item>
           </items>
         </list>
@@ -770,365 +689,6 @@
         </list>
       </presentation>
     </class>
-    <class id="AnsiblePlaybook" _delta="define">
-      <parent>cmdbAbstractObject</parent>
-      <properties>
-        <category>bizmodel,searchable</category>
-        <abstract>false</abstract>
-        <db_table>ansibleplaybook</db_table>
-        <naming>
-          <attributes>
-            <attribute id="name"/>
-          </attributes>
-        </naming>
-        <reconciliation>
-          <attributes>
-            <attribute id="name"/>
-            <attribute id="ansible_id"/>
-          </attributes>
-        </reconciliation>
-        <icon>asset/img/icons8-ansibleplaybook.svg</icon>
-      </properties>
-      <fields>
-        <field id="name" xsi:type="AttributeString">
-          <sql>name</sql>
-          <default_value/>
-          <is_null_allowed>false</is_null_allowed>
-          <validation_pattern/>
-        </field>
-        <field id="ansible_id" xsi:type="AttributeExternalKey">
-          <sql>ansible_id</sql>
-          <filter/>
-          <dependencies/>
-          <is_null_allowed>false</is_null_allowed>
-          <target_class>Ansible</target_class>
-          <on_target_delete>DEL_AUTO</on_target_delete>
-        </field>
-        <field id="ansible_name" xsi:type="AttributeExternalField">
-          <extkey_attcode>ansible_id</extkey_attcode>
-          <target_attcode>name</target_attcode>
-        </field>
-        <field id="org_id" xsi:type="AttributeExternalField">
-          <extkey_attcode>ansible_id</extkey_attcode>
-          <target_attcode>org_id</target_attcode>
-        </field>
-        <field id="status" xsi:type="AttributeEnum">
-          <sql>status</sql>
-          <values>
-            <value id="production">production</value>
-            <value id="implementation">implementation</value>
-            <value id="obsolete">obsolete</value>
-          </values>
-          <default_value/>
-          <is_null_allowed>true</is_null_allowed>
-          <display_style>list</display_style>
-          <dependencies/>
-        </field>
-        <field id="recurrent" xsi:type="AttributeEnum">
-          <sql>recurrent</sql>
-          <values>
-            <value id="yes">yes</value>
-            <value id="no">no</value>
-          </values>
-          <default_value>yes</default_value>
-          <is_null_allowed>true</is_null_allowed>
-          <display_style>list</display_style>
-          <dependencies/>
-        </field>
-        <field id="last_execution_date" xsi:type="AttributeDateTime">
-          <sql>last_execution_date</sql>
-          <default_value/>
-          <is_null_allowed>true</is_null_allowed>
-          <tracking_level>none</tracking_level>
-        </field>
-        <field id="duration" xsi:type="AttributeDuration">
-          <sql>duration</sql>
-          <default_value/>
-          <is_null_allowed>true</is_null_allowed>
-          <tracking_level>none</tracking_level>
-        </field>
-        <field id="script" xsi:type="AttributeBlob"/>
-        <field id="functionalcis_list" xsi:type="AttributeLinkedSetIndirect">
-          <ext_key_to_me>ansibleplaybook_id</ext_key_to_me>
-          <ext_key_to_remote>functionalci_id</ext_key_to_remote>
-          <linked_class>lnkAnsiblePlaybookToFunctionalCI</linked_class>
-          <count_min>0</count_min>
-          <count_max>0</count_max>
-          <duplicates>false</duplicates>
-        </field>
-      </fields>
-      <methods>
-        <method id="DisplayBareProperties">
-          <static>false</static>
-          <access>public</access>
-          <type>Overload-cmdbAbstractObject</type>
-          <comment><![CDATA[/**
-	 * Overload the display of the properties to add a tab (the first one)
-	 * with the preview of the document
-	 */
-	]]></comment>
-          <code><![CDATA[public function DisplayBareProperties(WebPage $oPage, $bEditMode = false, $sPrefix = '', $aExtraParams = array())
-	{
-		$aFieldsMap = parent::DisplayBareProperties($oPage, $bEditMode, $sPrefix, $aExtraParams);
-		if (!$bEditMode)
-		{
-			$oPage->add('<fieldset>');
-			$oPage->add('<legend>'.Dict::S('Class:Document:PreviewTab').'</legend>');
-			$oPage->add($this->DisplayDocumentInline($oPage, 'script'));
-			$oPage->add('</fieldset>');
-		}
-		return $aFieldsMap;
-	}]]></code>
-        </method>
-      </methods>
-      <presentation>
-        <list>
-          <items>
-            <item id="org_id">
-              <rank>20</rank>
-            </item>
-            <item id="status">
-              <rank>30</rank>
-            </item>
-          </items>
-        </list>
-        <search>
-          <items>
-            <item id="name">
-              <rank>10</rank>
-            </item>
-            <item id="org_id">
-              <rank>20</rank>
-            </item>
-            <item id="status">
-              <rank>30</rank>
-            </item>
-          </items>
-        </search>
-        <default_search>
-          <items>
-            <item id="name">
-              <rank>10</rank>
-            </item>
-            <item id="org_id">
-              <rank>20</rank>
-            </item>
-            <item id="status">
-              <rank>30</rank>
-            </item>
-          </items>
-        </default_search>
-        <details>
-          <items>
-            <item id="col:col0">
-              <items>
-                <item id="fieldset:Class:AnsiblePlaybook:baseinfo">
-                  <items>
-                    <item id="name">
-                      <rank>10</rank>
-                    </item>
-                    <item id="ansible_id">
-                      <rank>20</rank>
-                    </item>
-                    <item id="org_id">
-                      <rank>30</rank>
-                    </item>
-                    <item id="status">
-                      <rank>40</rank>
-                    </item>
-                    <item id="recurrent">
-                      <rank>50</rank>
-                    </item>
-                  </items>
-                  <rank>10</rank>
-                </item>
-                <item id="fieldset:Class:AnsiblePlaybook:scriptinfo">
-                  <items>
-                    <item id="script">
-                      <rank>10</rank>
-                    </item>
-                  </items>
-                  <rank>20</rank>
-                </item>
-              </items>
-              <rank>10</rank>
-            </item>
-            <item id="col:col1">
-              <items>
-                <item id="fieldset:Class:AnsiblePlaybook:operation">
-                  <items>
-                    <item id="last_execution_date">
-                      <rank>10</rank>
-                    </item>
-                    <item id="duration">
-                      <rank>20</rank>
-                    </item>
-                  </items>
-                  <rank>10</rank>
-               </item>
-              </items>
-              <rank>20</rank>
-            </item>
-            <item id="functionalcis_list">
-              <rank>30</rank>
-            </item>
-          </items>
-        </details>
-      </presentation>
-    </class>
-    <class id="lnkAnsiblePlaybookToFunctionalCI" _delta="define">
-      <parent>cmdbAbstractObject</parent>
-      <properties>
-        <is_link>1</is_link>
-        <category>bizmodel,ipmgmt</category>
-        <abstract>false</abstract>
-        <key_type>autoincrement</key_type>
-        <db_table>lnkansibleplaybooktofunctionalci</db_table>
-        <db_key_field>id</db_key_field>
-        <db_final_class_field/>
-        <naming>
-          <attributes>
-            <attribute id="functionalci_name"/>
-            <attribute id="ansibleplaybook_name"/>
-          </attributes>
-        </naming>
-        <style>
-          <icon/>
-        </style>
-        <reconciliation>
-          <attributes>
-            <attribute id="functionalci_id"/>
-            <attribute id="ansibleplaybook_id"/>
-          </attributes>
-        </reconciliation>
-        <uniqueness_rules>
-          <rule id="no_duplicate">
-            <attributes>
-              <attribute id="functionalci_id"/>
-              <attribute id="ansibleplaybook_id"/>
-            </attributes>
-            <filter><![CDATA[]]></filter>
-            <disabled>false</disabled>
-            <is_blocking>true</is_blocking>
-          </rule>
-        </uniqueness_rules>
-      </properties>
-      <fields>
-        <field id="functionalci_id" xsi:type="AttributeExternalKey">
-          <sql>functionalci_id</sql>
-          <target_class>FunctionalCI</target_class>
-          <is_null_allowed>false</is_null_allowed>
-          <on_target_delete>DEL_AUTO</on_target_delete>
-          <jointype/>
-        </field>
-        <field id="functionalci_name" xsi:type="AttributeExternalField">
-          <extkey_attcode>functionalci_id</extkey_attcode>
-          <target_attcode>name</target_attcode>
-        </field>
-        <field id="ansibleplaybook_id" xsi:type="AttributeExternalKey">
-          <sql>ansibleplaybook_id</sql>
-          <target_class>AnsiblePlaybook</target_class>
-          <is_null_allowed>false</is_null_allowed>
-          <on_target_delete>DEL_AUTO</on_target_delete>
-          <jointype/>
-        </field>
-        <field id="ansibleplaybook_name" xsi:type="AttributeExternalField">
-          <extkey_attcode>ansibleplaybook_id</extkey_attcode>
-          <target_attcode>name</target_attcode>
-        </field>
-        <field id="action" xsi:type="AttributeEnum">
-          <sql>action</sql>
-          <values>
-            <value id="toschedule">toschedule</value>
-            <value id="toexecute">toexecute</value>
-          </values>
-          <default_value>toexecute</default_value>
-          <is_null_allowed>false</is_null_allowed>
-        </field>
-        <field id="status" xsi:type="AttributeEnum">
-          <sql>status</sql>
-          <values>
-            <value id="executed">executed</value>
-            <value id="failed">failed</value>
-          </values>
-          <default_value></default_value>
-          <is_null_allowed>true</is_null_allowed>
-        </field>
-      </fields>
-      <methods>
-        <method id="DoCheckToWrite">
-          <comment/>
-          <static>false</static>
-          <access>protected</access>
-          <type>Overload-cmdbAbstractObject</type>
-          <code><![CDATA[    public function DoCheckToWrite()
-    {
-    	parent::DoCheckToWrite();
-
-    	$iCI = $this->Get('functionalci_id');
-    	$oCI = MetaModel::GetObject('FunctionalCI', $iCI, false);
-    	if (!is_null($oCI))
-    	{
-			if (!in_array($oCI->Get('finalclass'), array('Server', 'VirtualMachine', 'ApplicationSolution')))
-			{
-				$this->m_aCheckIssues[] = Dict::Format('UI:AnsiblePlaybook:Action:New:lnkAnsiblePlaybookToFunctionalCI:WrongCIClass');
-			}
-		}
-    	return;
-	}]]></code>
-        </method>
-      </methods>
-      <presentation>
-        <details>
-          <items>
-            <item id="functionalci_id">
-              <rank>10</rank>
-            </item>
-            <item id="ansibleplaybook_id">
-              <rank>20</rank>
-            </item>
-            <item id="action">
-              <rank>30</rank>
-            </item>
-            <item id="status">
-              <rank>40</rank>
-            </item>
-          </items>
-        </details>
-        <search>
-          <items>
-            <item id="functionalci_id">
-              <rank>10</rank>
-            </item>
-            <item id="ansibleplaybook_id">
-              <rank>20</rank>
-            </item>
-            <item id="action">
-              <rank>30</rank>
-            </item>
-            <item id="status">
-              <rank>40</rank>
-            </item>
-          </items>
-        </search>
-        <list>
-          <items>
-            <item id="functionalci_id">
-              <rank>10</rank>
-            </item>
-            <item id="ansibleplaybook_id">
-              <rank>20</rank>
-            </item>
-            <item id="action">
-              <rank>30</rank>
-            </item>
-            <item id="status">
-              <rank>40</rank>
-            </item>
-          </items>
-        </list>
-      </presentation>
-    </class>
   </classes>
   <dictionaries/>
   <menus>
@@ -1157,10 +717,6 @@
                 <rank>3</rank>
                 <class>AnsibleInventoryGroup</class>
               </dashlet>
-              <dashlet id="14" xsi:type="DashletBadge">
-                <rank>4</rank>
-                <class>AnsiblePlaybook</class>
-              </dashlet>
             </dashlets>
           </cell>
         </cells>
@@ -1174,6 +730,51 @@
     <constant id="YAML_HOSTS_SPACE" xsi:type="integer" _delta="define">4</constant>
     <constant id="YAML_CIS_SPACE" xsi:type="integer" _delta="define">6</constant>
   </constants>
+  <user_rights>
+    <groups>
+      <group id="AnsibleObject" _delta="define">
+        <classes>
+          <class id="Ansible"/>
+          <class id="AnsibleInventory"/>
+          <class id="AnsibleInventoryGroup"/>
+          <class id="lnkAnsibleInventoryGroupToFunctionalCI"/>
+        </classes>
+      </group>
+    </groups>
+    <profiles>
+      <profile id="130" _delta="define">
+        <name>Ansible Manager</name>
+        <description>Person in charge of Ansible documentation in iTop and eligible to execute Ansible dedicated WEB services</description>
+        <groups>
+          <group id="AnsibleObject">
+            <actions>
+              <action id="action:read">allow</action>
+              <action id="action:bulk read">allow</action>
+              <action id="action:write">allow</action>
+              <action id="action:bulk write">allow</action>
+              <action id="action:delete">allow</action>
+              <action id="action:bulk delete">allow</action>
+             </actions>
+          </group>
+          <group id="General">
+            <actions>
+              <action id="action:read">allow</action>
+           </actions>
+          </group>
+          <group id="Documentation">
+            <actions>
+              <action id="action:read">allow</action>
+            </actions>
+          </group>
+          <group id="Configuration">
+            <actions>
+              <action id="action:read">allow</action>
+            </actions>
+          </group>
+        </groups>
+      </profile>
+    </profiles>
+  </user_rights>
   <snippets>
     <snippet id="CombodoAnsibleDatamodel" _delta="define">
       <placement>module</placement>
@@ -1243,7 +844,6 @@ class CombodoAnsibleDatamodelExtraMenus implements iPopupMenuExtension {
 		return $aResult;
 	}
 }]]></content>
-
     </snippet>
   </snippets>
 </itop_design>
