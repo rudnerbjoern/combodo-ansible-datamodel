@@ -141,12 +141,22 @@ class _Ansible extends FunctionalCI
 				// Prepend the ungrouped hosts at the beginning of the file
 				if ($sGroupName == YAML_UNGROUPED_INVENTORY_GROUP_NAME) {
 					while ($oLnk = $oLnkSet->Fetch()) {
-						$sTextPrepend .= $oLnk->Get('functionalci_name')."\n";
+						$sTag = $oLnk->Get('tag');
+						if ($sTag != '') {
+							$sTextPrepend .= $oLnk->Get('functionalci_name')." ".$oLnk->Get('tag')."\n";
+						} else {
+							$sTextPrepend .= $oLnk->Get('functionalci_name')."\n";
+						}
 					}
 				} else {
 					$sText .= "\n[".$sGroupName."]\n";
 					while ($oLnk = $oLnkSet->Fetch()) {
-						$sText .= $oLnk->Get('functionalci_name')."\n";
+						$sTag = $oLnk->Get('tag');
+						if ($sTag != '') {
+							$sText .= $oLnk->Get('functionalci_name')." ".$oLnk->Get('tag')."\n";
+						} else {
+							$sText .= $oLnk->Get('functionalci_name')."\n";
+						}
 					}
 				}
 			}
