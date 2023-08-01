@@ -96,11 +96,17 @@ class _Ansible extends FunctionalCI
 			if ($oLnkSet->CountExceeds(0)) {
 				$sText .= str_pad("", $sPadding + YAML_HOSTS_SPACE)."hosts:\n";
 				while ($oLnk = $oLnkSet->Fetch()) {
-					$sTag = $oLnk->Get('tag');
-					if ($sTag != '') {
-						$sText .= str_pad("", $sPadding + YAML_CIS_SPACE).$oLnk->Get('functionalci_name').": {".$oLnk->Get('tag')."}\n";
-					} else {
-						$sText .= str_pad("", $sPadding + YAML_CIS_SPACE).$oLnk->Get('functionalci_name').":\n";
+					$sText .= str_pad("", $sPadding + YAML_CIS_SPACE).$oLnk->Get('functionalci_name').":\n";
+					// Add tags if required
+					/** @var \ormTagSet:: $oTag */
+					$oTag = $oLnk->Get('tag');
+					$aTagValues = $oTag->GetLabels();
+					foreach ($aTagValues as $sTag) {
+						$sLabel = strstr($sTag, "=", true);
+						if ($sLabel !== false) {
+							$sValue = substr(strstr($sTag, "=", false), 1);
+							$sText .= str_pad("", $sPadding + YAML_HOST_VARIABLES_SPACE).$sLabel.": ".$sValue."\n";
+						}
 					}
 				}
 			}
@@ -151,9 +157,12 @@ class _Ansible extends FunctionalCI
 				} else {
 					$sText .= "\n[".$sGroupName."]\n";
 					while ($oLnk = $oLnkSet->Fetch()) {
-						$sTag = $oLnk->Get('tag');
-						if ($sTag != '') {
-							$sText .= $oLnk->Get('functionalci_name')." ".$oLnk->Get('tag')."\n";
+						/** @var \ormTagSet:: $oTag */
+						$oTag = $oLnk->Get('tag');
+						$aTagValues = $oTag->GetLabels();
+						if (!empty($aTagValues)) {
+							$sTag = implode(' ', $aTagValues);
+							$sText .= $oLnk->Get('functionalci_name')." ".$sTag."\n";
 						} else {
 							$sText .= $oLnk->Get('functionalci_name')."\n";
 						}
