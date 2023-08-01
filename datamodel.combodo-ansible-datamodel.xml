@@ -727,6 +727,7 @@
     <constant id="YAML_GROUPS_SPACE" xsi:type="integer" _delta="define">2</constant>
     <constant id="YAML_HOSTS_SPACE" xsi:type="integer" _delta="define">4</constant>
     <constant id="YAML_CIS_SPACE" xsi:type="integer" _delta="define">6</constant>
+    <constant id="YAML_HOST_VARIABLES_SPACE" xsi:type="integer" _delta="define">8</constant>
   </constants>
   <user_rights>
     <groups>
