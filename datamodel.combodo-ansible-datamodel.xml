@@ -617,11 +617,9 @@
           <extkey_attcode>ansibleinventorygroup_id</extkey_attcode>
           <target_attcode>name</target_attcode>
         </field>
-        <field id="tag" xsi:type="AttributeString">
+        <field id="tag" xsi:type="AttributeTagSet">
           <sql>tag</sql>
-          <default_value/>
           <is_null_allowed>true</is_null_allowed>
-          <validation_pattern/>
         </field>
       </fields>
       <methods>
