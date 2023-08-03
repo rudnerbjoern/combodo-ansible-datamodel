@@ -310,7 +310,7 @@
 		parent::DisplayBareRelations($oP, $bEditMode);
 
         if (! $bEditMode) {
-            $sOQL = "SELECT lnkAnsibleInventoryGroupToFunctionalCI AS l JOIN AnsibleInventoryGroup AS g ON l.ansibleinventorygroup_id = g.id WHERE g.ansibleinventory_name = :name";
+            $sOQL = "SELECT lnkAnsibleInventoryGroupToCI AS l JOIN AnsibleInventoryGroup AS g ON l.ansibleinventorygroup_id = g.id WHERE g.ansibleinventory_name = :name";
 	        $oSet =  new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('name' => $this->Get('name')));
 			$sName = Dict::Format('Class:AnsibleInventory/Tab:cis_list');
 			$sTitle = Dict::Format('Class:AnsibleInventory/Tab:cis_list+');
@@ -319,7 +319,15 @@
 			$sCode = 'functionalci';
 			$oP->SetCurrentTab($sCode, $sName.$sCount, $sTitle);
 			$oBlock = new DisplayBlock($oSet->GetFilter(), 'list', false);
-            if (version_compare(ITOP_DESIGN_LATEST_VERSION, '3.1', '<')) {
+    		if (version_compare(ITOP_DESIGN_LATEST_VERSION, '3.0', '<')) {
+			    $oP->p(MetaModel::GetClassIcon('FunctionalCI').'&nbsp;'.$sTitle);
+    			if ($iCount > 0) {
+	    			$oBlock = new DisplayBlock($oSet->GetFilter(), 'list');
+		    		$oBlock->Display($oP, $sCode, array('menu' => false));
+			    } else {
+				    $oP->p(Dict::S('UI:NoObjectToDisplay'));
+			    }
+		    } elseif (version_compare(ITOP_DESIGN_LATEST_VERSION, '3.1', '<')) {
                 $oClassIcon = new Combodo\iTop\Application\UI\Base\Component\MedallionIcon\MedallionIcon(MetaModel::GetClassIcon('FunctionalCI', false));
                 $oClassIcon->SetDescription($sTitle)->AddCSSClass('ibo-block-list--medallion');
                 $oP->AddUiBlock($oClassIcon);
@@ -474,7 +482,7 @@
         <field id="functionalcis_list" xsi:type="AttributeLinkedSetIndirect">
           <ext_key_to_me>ansibleinventorygroup_id</ext_key_to_me>
           <ext_key_to_remote>functionalci_id</ext_key_to_remote>
-          <linked_class>lnkAnsibleInventoryGroupToFunctionalCI</linked_class>
+          <linked_class>lnkAnsibleInventoryGroupToCI</linked_class>
           <count_min>0</count_min>
           <count_max>0</count_max>
           <duplicates>false</duplicates>
@@ -557,14 +565,14 @@
         </default_search>
       </presentation>
     </class>
-    <class id="lnkAnsibleInventoryGroupToFunctionalCI" _delta="define">
+    <class id="lnkAnsibleInventoryGroupToCI" _delta="define">
       <parent>cmdbAbstractObject</parent>
       <properties>
         <is_link>1</is_link>
         <category>bizmodel,ipmgmt</category>
         <abstract>false</abstract>
         <key_type>autoincrement</key_type>
-        <db_table>lnkansibleinventorygrouptofunctionalci</db_table>
+        <db_table>lnkansibleinventorygrouptoci</db_table>
         <db_key_field>id</db_key_field>
         <db_final_class_field/>
         <naming>
@@ -638,7 +646,7 @@
     	{
 			if (!in_array($oCI->Get('finalclass'), array('Server', 'VirtualMachine', 'ApplicationSolution')))
 			{
-				$this->m_aCheckIssues[] = Dict::Format('UI:AnsibleInventoryGroup:Action:New:lnkAnsibleInventoryGroupToFunctionalCI:WrongCIClass');
+				$this->m_aCheckIssues[] = Dict::Format('UI:AnsibleInventoryGroup:Action:New:lnkAnsibleInventoryGroupToCI:WrongCIClass');
 			}
 		}
     	return;
@@ -736,7 +744,7 @@
           <class id="Ansible"/>
           <class id="AnsibleInventory"/>
           <class id="AnsibleInventoryGroup"/>
-          <class id="lnkAnsibleInventoryGroupToFunctionalCI"/>
+          <class id="lnkAnsibleInventoryGroupToCI"/>
         </classes>
       </group>
     </groups>

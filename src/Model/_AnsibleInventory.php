@@ -94,7 +94,11 @@ class _AnsibleInventory extends cmdbAbstractObject
 		$oAnsible = MetaModel::GetObject('Ansible', $this->Get('ansible_id'));
 		$sHtml = $oAnsible->GetInventoryFile($this->Get('name'), $sFormat);
 		$sUITitle = Dict::Format('UI:AnsibleInventory:Action:FileDisplay:PageTitle',$this->GetName());
-		$oP->SetBreadCrumbEntry($sUITitle, $sUITitle, '', '', 'fa fa-file', iTopWebPage::ENUM_BREADCRUMB_ENTRY_ICON_TYPE_CSS_CLASSES);
+		if (version_compare(ITOP_DESIGN_LATEST_VERSION, '3.0', '<')) {
+			$oP->SetBreadCrumbEntry($sUITitle, $sUITitle, '', '', 'fa fa-file');
+		} else {
+			$oP->SetBreadCrumbEntry($sUITitle, $sUITitle, '', '', 'fa fa-file', iTopWebPage::ENUM_BREADCRUMB_ENTRY_ICON_TYPE_CSS_CLASSES);
+		}
 		$oP->add(<<<HTML
 				<div id="inventoryfile" class="ibo-is-code">
 				<pre>$sHtml</pre>

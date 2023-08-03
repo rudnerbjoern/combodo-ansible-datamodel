@@ -80,22 +80,22 @@ Dict::Add('EN US', 'English', 'English', array(
 ));
 
 //
-// Class lnkAnsibleInventoryGroupToFunctionalCI
+// Class lnkAnsibleInventoryGroupToCI
 //
 Dict::Add('EN US', 'English', 'English', array(
-	'Class:lnkAnsibleInventoryGroupToFunctionalCI' => 'Link Ansible Inventory Group / Functional CI',
-	'Class:lnkAnsibleInventoryGroupToFunctionalCI+' => '',
-	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Name' => '%1$s / %2$s',
-	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:functionalci_id' => 'CI',
-	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:functionalci_id+' => 'CI or host that belongs to the group',
-	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:functionalci_name' => 'CI name',
-	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:functionalci_name+' => '',
-	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:ansibleinventorygroup_id' => 'Inventory Group',
-	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:ansibleinventorygroup_id+' => '',
-	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:ansibleinventorygroup_name' => 'Inventory Group name',
-	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:ansibleinventorygroup_name+' => '',
-	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:tag' => 'Tag',
-	'Class:lnkAnsibleInventoryGroupToFunctionalCI/Attribute:tag+' => '',
+	'Class:lnkAnsibleInventoryGroupToCI' => 'Link Ansible Inventory Group / Functional CI',
+	'Class:lnkAnsibleInventoryGroupToCI+' => '',
+	'Class:lnkAnsibleInventoryGroupToCI/Name' => '%1$s / %2$s',
+	'Class:lnkAnsibleInventoryGroupToCI/Attribute:functionalci_id' => 'CI',
+	'Class:lnkAnsibleInventoryGroupToCI/Attribute:functionalci_id+' => 'CI or host that belongs to the group',
+	'Class:lnkAnsibleInventoryGroupToCI/Attribute:functionalci_name' => 'CI name',
+	'Class:lnkAnsibleInventoryGroupToCI/Attribute:functionalci_name+' => '',
+	'Class:lnkAnsibleInventoryGroupToCI/Attribute:ansibleinventorygroup_id' => 'Inventory Group',
+	'Class:lnkAnsibleInventoryGroupToCI/Attribute:ansibleinventorygroup_id+' => '',
+	'Class:lnkAnsibleInventoryGroupToCI/Attribute:ansibleinventorygroup_name' => 'Inventory Group name',
+	'Class:lnkAnsibleInventoryGroupToCI/Attribute:ansibleinventorygroup_name+' => '',
+	'Class:lnkAnsibleInventoryGroupToCI/Attribute:tag' => 'Tag',
+	'Class:lnkAnsibleInventoryGroupToCI/Attribute:tag+' => '',
 ));
 
 //
@@ -108,8 +108,10 @@ Dict::Add('EN US', 'English', 'English', array(
 	'UI:AnsibleInventory:Action:Details:Menu' => 'Details',
 	'UI:AnsibleInventory:Action:FileDisplay:PageTitle' => 'Inventory %1$s file',
 	'UI:AnsibleInventory:Action:FileDisplay:Title' => 'Inventory file',
+	'UI:AnsibleInventory:Action:FileDisplay:Title:Title_Class_Object' => 'Inventory file for %1$s %2$s',
+	'UI:AnsibleInventory:Action:FileDisplay:Title:PageTitle_Object_Class' => 'Inventory file',
 	'UI:AnsibleInventory:Action:FileDisplay:Format:ini' => 'Display inventory file in INI format',
 	'UI:AnsibleInventory:Action:FileDisplay:Format:yml' => 'Display inventory file in YML format',
-	'UI:AnsibleInventoryGroup:Action:New:lnkAnsibleInventoryGroupToFunctionalCI:WrongCIClass' => 'Only Servers, Virtual Machines and Application Solutions can be attached to an inventory group',
+	'UI:AnsibleInventoryGroup:Action:New:lnkAnsibleInventoryGroupToCI:WrongCIClass' => 'Only Servers, Virtual Machines and Application Solutions can be attached to an inventory group',
 ));
 

@@ -53,7 +53,7 @@ class _Ansible extends FunctionalCI
 	 */
 	private function GetlnkInventoryGroupToFunctionalCIs($iGroupId)
 	{
-		$sOQL = "SELECT lnkAnsibleInventoryGroupToFunctionalCI AS l JOIN AnsibleInventoryGroup AS ig ON l.ansibleinventorygroup_id = ig.id WHERE ig.id = :groupid";
+		$sOQL = "SELECT lnkAnsibleInventoryGroupToCI AS l JOIN AnsibleInventoryGroup AS ig ON l.ansibleinventorygroup_id = ig.id WHERE ig.id = :groupid";
 		$oSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('groupid' => $iGroupId));
 		return $oSet;
 	}
@@ -66,7 +66,7 @@ class _Ansible extends FunctionalCI
 	 */
 	private function GetFunctionalCIs ($sInventory)
 	{
-		$sOQL = "SELECT FunctionalCI AS f JOIN lnkAnsibleInventoryGroupToFunctionalCI AS l ON l.functionalci_id = f.id JOIN AnsibleInventoryGroup AS g ON l.ansibleinventorygroup_id = g.id WHERE g.ansible_id = :id AND g.ansibleinventory_name = :name";
+		$sOQL = "SELECT FunctionalCI AS f JOIN lnkAnsibleInventoryGroupToCI AS l ON l.functionalci_id = f.id JOIN AnsibleInventoryGroup AS g ON l.ansibleinventorygroup_id = g.id WHERE g.ansible_id = :id AND g.ansibleinventory_name = :name";
 		$oSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('id' => $this->GetKey(), 'name' => $sInventory));
 		return $oSet;
 	}
