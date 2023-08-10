@@ -695,6 +695,13 @@
         </list>
       </presentation>
     </class>
+    <class id="VirtualMachine" _delta="if_exists">
+      <fields>
+        <field id="virtualhost_id" _delta="if_exists">
+          <is_null_allowed _delta="redefine">true</is_null_allowed>
+        </field>
+      </fields>
+    </class>
   </classes>
   <dictionaries/>
   <menus>
