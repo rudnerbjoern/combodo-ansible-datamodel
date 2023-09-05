@@ -644,7 +644,13 @@
     	$oCI = MetaModel::GetObject('FunctionalCI', $iCI, false);
     	if (!is_null($oCI))
     	{
-			if (!in_array($oCI->Get('finalclass'), array('Server', 'VirtualMachine', 'ApplicationSolution')))
+    		$aCIClassesInInventoryGroupsParams = MetaModel::GetModuleSetting(ANSIBLE_MODULE_NAME, ANSIBLE_CI_CLASSES_IN_INVENTORYGROUPS, array());
+    		if (!empty($aCIClassesInInventoryGroupsParams)) {
+    			$aCIClassesInInventoryGroups = $aCIClassesInInventoryGroupsParams;
+    		} else {
+    			$aCIClassesInInventoryGroups= array('Server', 'VirtualMachine', 'ApplicationSolution');
+    		}
+			if (!in_array($oCI->Get('finalclass'), $aCIClassesInInventoryGroups))
 			{
 				$this->m_aCheckIssues[] = Dict::Format('UI:AnsibleInventoryGroup:Action:New:lnkAnsibleInventoryGroupToCI:WrongCIClass');
 			}
@@ -743,6 +749,8 @@
     <constant id="YAML_HOSTS_SPACE" xsi:type="integer" _delta="define">4</constant>
     <constant id="YAML_CIS_SPACE" xsi:type="integer" _delta="define">6</constant>
     <constant id="YAML_HOST_VARIABLES_SPACE" xsi:type="integer" _delta="define">8</constant>
+    <constant id="ANSIBLE_MODULE_NAME" xsi:type="string" _delta="define">combodo-ansible-datamodel</constant>
+    <constant id="ANSIBLE_CI_CLASSES_IN_INVENTORYGROUPS" xsi:type="string" _delta="define">ci_classes_in_inventory_groups</constant>
   </constants>
   <user_rights>
     <groups>
