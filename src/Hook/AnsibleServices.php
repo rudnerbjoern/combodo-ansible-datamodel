@@ -66,6 +66,7 @@ class AnsibleServices implements iRestServiceProvider
 		switch ($sVerb) {
 			case 'ansible/get_webservices_version':
 				$oResult = new RestResult();
+				$oResult->code = RestResult::OK;
 				$oResult->message = 'Running version of the iTop WEB services dedicated to Ansible is: '.static::ANSIBLE_SERVICES_VERSION;
 				break;
 
@@ -89,8 +90,10 @@ class AnsibleServices implements iRestServiceProvider
 					$sFormat = ($sFormat == 'yml') ? 'yml' : 'ini';
 					$sText = $oAnsible->GetInventoryFile($sInventory, $sFormat);
 					$oResult->AddObject(0, 'computed', $oAnsible, $sText);
+					$oResult->code = RestResult::OK;
 					$oResult->message = "Found 1 Ansible application";
 				} else {
+					$oResult->code = RestResult::INTERNAL_ERROR;
 					$oResult->message = "No Ansible application found";
 				}
 				break;
@@ -118,9 +121,11 @@ class AnsibleServices implements iRestServiceProvider
 						$oResult->message = $sError;
 					} else {
 						$oResult->AddObject(0, 'computed', $oAnsible, $sHostList);
+						$oResult->code = RestResult::OK;
 						$oResult->message = "Found: ".$iNbCIs.' CIs';
 					}
 				} else {
+					$oResult->code = RestResult::INTERNAL_ERROR;
 					$oResult->message = "No Ansible application found";
 				}
 				break;
