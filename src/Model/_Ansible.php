@@ -59,15 +59,52 @@ class _Ansible extends FunctionalCI
 	}
 
 	/**
-	 * Get the list of all CIs attached to the Ansible instance
+	 * Get the list of all CIs attached to the Ansible instance in a given inventory
+	 *
+	 * @param $sInventory
+	 * @return CMDBObjectSet
+	 * @throws \OQLException
+	 */
+	private function GetFunctionalCIsInInventory ($sInventory)
+	{
+		$sOQL = "SELECT FunctionalCI AS f JOIN lnkAnsibleInventoryGroupToCI AS l ON l.functionalci_id = f.id JOIN AnsibleInventoryGroup AS g ON l.ansibleinventorygroup_id = g.id WHERE g.ansible_id = :id AND g.ansibleinventory_name = :name";
+		$oSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('id' => $this->GetKey(), 'name' => $sInventory));
+		return $oSet;
+	}
+
+	/**
+	 * Get the list of all CIs which class is authorized in inventories
 	 *
 	 * @return CMDBObjectSet
 	 * @throws \OQLException
 	 */
-	private function GetFunctionalCIs ($sInventory)
+	private function GetFunctionalCIsAuthorizedInInventories ()
 	{
-		$sOQL = "SELECT FunctionalCI AS f JOIN lnkAnsibleInventoryGroupToCI AS l ON l.functionalci_id = f.id JOIN AnsibleInventoryGroup AS g ON l.ansibleinventorygroup_id = g.id WHERE g.ansible_id = :id AND g.ansibleinventory_name = :name";
-		$oSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('id' => $this->GetKey(), 'name' => $sInventory));
+		// Get list of CI classes that are authorized in inventories
+		$aCIClassesInInventoryGroupsParams = MetaModel::GetModuleSetting(ANSIBLE_MODULE_NAME, ANSIBLE_CI_CLASSES_IN_INVENTORYGROUPS, array());
+		if (!empty($aCIClassesInInventoryGroupsParams)) {
+			$aCIClassesInInventoryGroups = $aCIClassesInInventoryGroupsParams;
+		} else {
+			$aCIClassesInInventoryGroups = array('Server', 'VirtualMachine', 'ApplicationSolution');
+		}
+
+		// Build list for OQL
+		$bFirstItem = true;
+		$sClasses = "(";
+		foreach ($aCIClassesInInventoryGroups AS $iKey => $sClass) {
+			if ($bFirstItem) {
+				$bFirstItem = false;
+				$sClasses .= "'".$sClass."'";
+			} else {
+				$sClasses .= ",'".$sClass."'";
+			}
+		}
+		$sClasses .= ")";
+		IssueLog::Info($sClasses);
+
+		// Get CIs
+		$sOQL = "SELECT FunctionalCI WHERE finalclass IN ".$sClasses;
+		$oSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL));
 		return $oSet;
 	}
 
@@ -240,27 +277,28 @@ class _Ansible extends FunctionalCI
 		$iNbCIs = 0;
 		$sErrorMsg = '';
 
-		// Make sure correct class of CIs has been provided in OQL
-		$aOQLTerms =  explode(' ', $sOQL, 22);
-		$sCiClass = $aOQLTerms[1];
-		if (!in_array($sCiClass, ['Server', 'VirtualMachine', 'ApplicationSolution'])) {
-			$sErrorMsg = 'The requested CI class "'.$sCiClass.'" is not a part of an Ansible inventory';
-		} elseif (!MetaModel::IsValidAttCode($sCiClass, $sAttribute)) {
-			$sErrorMsg = 'The requested attribute "'.$sAttribute.'" is not valid for the CI class "'.$sCiClass.'"';
-		} else {
-			// Get set of CIs defined by inventory OQL
-			try {
-				$oHostByOQLSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL));
-			} catch (Exception $e) {
-				IssueLog::Debug('Invalid OQL provided');
-			}
+		// Get set of CIs defined by inventory OQL
+		try {
+			$oHostByOQLSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL));
+		} catch (Exception $e) {
+			$sErrorMsg = 'Invalid OQL provided';
+			IssueLog::Debug($sErrorMsg);
 
+			return [$sHostList, $iNbCIs, $sErrorMsg];
+		}
+
+		// Make sure that the requested attribute is part of the common class given by the set
+		$sCiClass = $oHostByOQLSet->GetClass();
+		if (!MetaModel::IsValidAttCode($sCiClass, $sAttribute)) {
+			$sErrorMsg = 'The requested attribute "'.$sAttribute.'" is not valid for the CI class "'.$sCiClass.'" resulting from the OQL.';
+		} else {
 			// Get set of CIs attached to the Ansible application
 			if ($sInventory != '') {
-				$oAnsibleCiSet = $this->GetFunctionalCIs($sInventory);
+				$oAnsibleCiSet = $this->GetFunctionalCIsInInventory($sInventory);
 				$oHostSet = $oHostByOQLSet->CreateIntersect($oAnsibleCiSet);
 			} else {
-				$oHostSet = $oHostByOQLSet;
+				$oAnsibleCiSet = $this->GetFunctionalCIsAuthorizedInInventories();
+				$oHostSet = $oHostByOQLSet->CreateIntersect($oAnsibleCiSet);
 			}
 			$iNbCIs = $oHostSet->Count();
 			$bFirstHost = true;
