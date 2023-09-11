@@ -648,7 +648,7 @@
     		if (!empty($aCIClassesInInventoryGroupsParams)) {
     			$aCIClassesInInventoryGroups = $aCIClassesInInventoryGroupsParams;
     		} else {
-    			$aCIClassesInInventoryGroups= array('Server', 'VirtualMachine', 'ApplicationSolution');
+    			$aCIClassesInInventoryGroups = array('Server', 'VirtualMachine', 'ApplicationSolution');
     		}
 			if (!in_array($oCI->Get('finalclass'), $aCIClassesInInventoryGroups))
 			{
