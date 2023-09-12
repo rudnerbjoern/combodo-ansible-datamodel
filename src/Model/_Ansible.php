@@ -73,6 +73,21 @@ class _Ansible extends FunctionalCI
 	}
 
 	/**
+	 * Get the default list of CIs allowed in inventories
+	 * @return string[]
+	 */
+	public static function GetDefaultFunctionalCIsInInventories()
+	{
+		$aDefaultCIs = [
+			'Server',
+			'VirtualMachine',
+			'ApplicationSolution'
+		];
+
+		return $aDefaultCIs;
+	}
+
+	/**
 	 * Get the list of all CIs which class is authorized in inventories
 	 *
 	 * @return CMDBObjectSet
@@ -85,7 +100,7 @@ class _Ansible extends FunctionalCI
 		if (!empty($aCIClassesInInventoryGroupsParams)) {
 			$aCIClassesInInventoryGroups = $aCIClassesInInventoryGroupsParams;
 		} else {
-			$aCIClassesInInventoryGroups = array('Server', 'VirtualMachine', 'ApplicationSolution');
+			$aCIClassesInInventoryGroups = _Ansible::GetDefaultFunctionalCIsInInventories();
 		}
 
 		// Build list for OQL

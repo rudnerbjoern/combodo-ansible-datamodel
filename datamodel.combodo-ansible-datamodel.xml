@@ -648,7 +648,7 @@
     		if (!empty($aCIClassesInInventoryGroupsParams)) {
     			$aCIClassesInInventoryGroups = $aCIClassesInInventoryGroupsParams;
     		} else {
-    			$aCIClassesInInventoryGroups = array('Server', 'VirtualMachine', 'ApplicationSolution');
+    			$aCIClassesInInventoryGroups = Combodo\iTop\Ansible\Model\_Ansible::GetDefaultFunctionalCIsInInventories();
     		}
 			if (!in_array($oCI->Get('finalclass'), $aCIClassesInInventoryGroups))
 			{
