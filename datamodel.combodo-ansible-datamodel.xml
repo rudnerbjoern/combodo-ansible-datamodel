@@ -614,6 +614,10 @@
           <extkey_attcode>functionalci_id</extkey_attcode>
           <target_attcode>name</target_attcode>
         </field>
+        <field id="functionalci_finalclass" xsi:type="AttributeExternalField">
+          <extkey_attcode>functionalci_id</extkey_attcode>
+          <target_attcode>finalclass</target_attcode>
+        </field>
         <field id="ansibleinventorygroup_id" xsi:type="AttributeExternalKey">
           <sql>ansibleinventorygroup_id</sql>
           <target_class>AnsibleInventoryGroup</target_class>
@@ -652,7 +656,18 @@
     		}
 			if (!in_array($oCI->Get('finalclass'), $aCIClassesInInventoryGroups))
 			{
-				$this->m_aCheckIssues[] = Dict::Format('UI:AnsibleInventoryGroup:Action:New:lnkAnsibleInventoryGroupToCI:WrongCIClass');
+				$bFirstItem = true;
+				$sListOfClasses = "";
+				foreach ($aCIClassesInInventoryGroups AS $sKey => $sClass) {
+					if ($bFirstItem) {
+						$bFirstItem = false;
+						$sListOfClasses .= MetaModel::GetName($sClass);
+					} else {
+						$sListOfClasses .= ", ".MetaModel::GetName($sClass);
+					}
+				}
+
+				$this->m_aCheckIssues[] = Dict::Format('UI:AnsibleInventoryGroup:Action:New:lnkAnsibleInventoryGroupToCI:WrongCIClass', $sListOfClasses);
 			}
 		}
     	return;
