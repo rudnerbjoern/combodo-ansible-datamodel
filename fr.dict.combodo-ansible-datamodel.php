@@ -111,6 +111,6 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'UI:AnsibleInventory:Action:FileDisplay:Title:PageTitle_Object_Class' => 'Fichier d\'inventaire',
 	'UI:AnsibleInventory:Action:FileDisplay:Format:ini' => 'Afficher le fichier d\'inventaire au format INI',
 	'UI:AnsibleInventory:Action:FileDisplay:Format:yml' => 'Afficher le fichier d\'inventaire au format YML',
-	'UI:AnsibleInventoryGroup:Action:New:lnkAnsibleInventoryGroupToCI:WrongCIClass' => 'Seuls les serveurs, les machines virtuelles et les solutions applicatives peuvent être rattachés à un groupe d\'inventaire',
+	'UI:AnsibleInventoryGroup:Action:New:lnkAnsibleInventoryGroupToCI:WrongCIClass' => 'Seules les classes de CIs suivantes peuvent être rattachés à un groupe d\'inventaire: %1$s',
 ));
 

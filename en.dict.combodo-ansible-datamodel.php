@@ -112,6 +112,6 @@ Dict::Add('EN US', 'English', 'English', array(
 	'UI:AnsibleInventory:Action:FileDisplay:Title:PageTitle_Object_Class' => 'Inventory file',
 	'UI:AnsibleInventory:Action:FileDisplay:Format:ini' => 'Display inventory file in INI format',
 	'UI:AnsibleInventory:Action:FileDisplay:Format:yml' => 'Display inventory file in YML format',
-	'UI:AnsibleInventoryGroup:Action:New:lnkAnsibleInventoryGroupToCI:WrongCIClass' => 'Only Servers, Virtual Machines and Application Solutions can be attached to an inventory group',
+	'UI:AnsibleInventoryGroup:Action:New:lnkAnsibleInventoryGroupToCI:WrongCIClass' => 'Only the following classes of CIs can be attached to an inventory group: %1$s',
 ));
 
