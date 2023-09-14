@@ -88,6 +88,23 @@ class _Ansible extends FunctionalCI
 	}
 
 	/**
+	 * Get list of CI classes that are authorized in inventories
+	 *
+	 * @return string[]
+	 */
+	private function GetFunctionalCIClassesAuthorizedInInventories ()
+	{
+		$aCIClassesInInventoryGroupsParams = MetaModel::GetModuleSetting(ANSIBLE_MODULE_NAME, ANSIBLE_CI_CLASSES_IN_INVENTORYGROUPS, array());
+		if (!empty($aCIClassesInInventoryGroupsParams)) {
+			$aCIClassesInInventoryGroups = $aCIClassesInInventoryGroupsParams;
+		} else {
+			$aCIClassesInInventoryGroups = _Ansible::GetDefaultFunctionalCIsInInventories();
+		}
+
+		return $aCIClassesInInventoryGroups;
+	}
+
+	/**
 	 * Get the list of all CIs which class is authorized in inventories
 	 *
 	 * @return CMDBObjectSet
@@ -95,13 +112,7 @@ class _Ansible extends FunctionalCI
 	 */
 	private function GetFunctionalCIsAuthorizedInInventories ()
 	{
-		// Get list of CI classes that are authorized in inventories
-		$aCIClassesInInventoryGroupsParams = MetaModel::GetModuleSetting(ANSIBLE_MODULE_NAME, ANSIBLE_CI_CLASSES_IN_INVENTORYGROUPS, array());
-		if (!empty($aCIClassesInInventoryGroupsParams)) {
-			$aCIClassesInInventoryGroups = $aCIClassesInInventoryGroupsParams;
-		} else {
-			$aCIClassesInInventoryGroups = _Ansible::GetDefaultFunctionalCIsInInventories();
-		}
+		$aCIClassesInInventoryGroups = $this->GetFunctionalCIClassesAuthorizedInInventories();
 
 		// Build list for OQL
 		$bFirstItem = true;
@@ -145,20 +156,26 @@ class _Ansible extends FunctionalCI
 
 			// Display list of hosts within the group
 			$oLnkSet = $this->GetlnkInventoryGroupToFunctionalCIs($oInventoryGroup->GetKey());
+			$oAnsibleAuthorizedCiSet = $this->GetFunctionalCIClassesAuthorizedInInventories();
 			if ($oLnkSet->CountExceeds(0)) {
 				$sText .= str_pad("", $sPadding + YAML_HOSTS_SPACE)."hosts:\n";
 				while ($oLnk = $oLnkSet->Fetch()) {
-					$sText .= str_pad("", $sPadding + YAML_CIS_SPACE).$oLnk->Get('functionalci_name').":\n";
-					// Add tags if required
-					/** @var \ormTagSet:: $oTag */
-					$oTag = $oLnk->Get('tag');
-					$aTagValues = $oTag->GetLabels();
-					foreach ($aTagValues as $sTag) {
-						$sLabel = strstr($sTag, "=", true);
-						if ($sLabel !== false) {
-							$sValue = substr(strstr($sTag, "=", false), 1);
-							$sText .= str_pad("", $sPadding + YAML_HOST_VARIABLES_SPACE).$sLabel.": ".$sValue."\n";
+					$sCIFinalclass = $oLnk->Get('functionalci_finalclass');
+					if (in_array($sCIFinalclass, $oAnsibleAuthorizedCiSet)) {
+						$sText .= str_pad("", $sPadding + YAML_CIS_SPACE).$oLnk->Get('functionalci_name').":\n";
+						// Add tags if required
+						/** @var \ormTagSet:: $oTag */
+						$oTag = $oLnk->Get('tag');
+						$aTagValues = $oTag->GetLabels();
+						foreach ($aTagValues as $sTag) {
+							$sLabel = strstr($sTag, "=", true);
+							if ($sLabel !== false) {
+								$sValue = substr(strstr($sTag, "=", false), 1);
+								$sText .= str_pad("", $sPadding + YAML_HOST_VARIABLES_SPACE).$sLabel.": ".$sValue."\n";
+							}
 						}
+					} else {
+						IssueLog::Warning("CI ".$oLnk->Get('functionalci_name')." has not been included in the inventory file because its class doesn't belong to the list of authorized classes.");
 					}
 				}
 			}
@@ -194,29 +211,40 @@ class _Ansible extends FunctionalCI
 			// Display list of hosts within the group
 			$sGroupName = $oInventoryGroup->Get('name');
 			$oLnkSet = $this->GetlnkInventoryGroupToFunctionalCIs($oInventoryGroup->GetKey());
+			$oAnsibleAuthorizedCiSet = $this->GetFunctionalCIClassesAuthorizedInInventories();
 			if ($oLnkSet->CountExceeds(0)) {
 				// Display group name but fot the ungrouped one
 				// Prepend the ungrouped hosts at the beginning of the file
 				if ($sGroupName == YAML_UNGROUPED_INVENTORY_GROUP_NAME) {
 					while ($oLnk = $oLnkSet->Fetch()) {
-						$sTag = $oLnk->Get('tag');
-						if ($sTag != '') {
-							$sTextPrepend .= $oLnk->Get('functionalci_name')." ".$oLnk->Get('tag')."\n";
+						$sCIFinalclass = $oLnk->Get('functionalci_finalclass');
+						if (in_array($sCIFinalclass, $oAnsibleAuthorizedCiSet)) {
+							$sTag = $oLnk->Get('tag');
+							if ($sTag != '') {
+								$sTextPrepend .= $oLnk->Get('functionalci_name')." ".$oLnk->Get('tag')."\n";
+							} else {
+								$sTextPrepend .= $oLnk->Get('functionalci_name')."\n";
+							}
 						} else {
-							$sTextPrepend .= $oLnk->Get('functionalci_name')."\n";
+							IssueLog::Warning("CI ".$oLnk->Get('functionalci_name')." has not been included in the inventory file because its class doesn't belong to the list of authorized classes.");
 						}
 					}
 				} else {
 					$sText .= "\n[".$sGroupName."]\n";
 					while ($oLnk = $oLnkSet->Fetch()) {
-						/** @var \ormTagSet:: $oTag */
-						$oTag = $oLnk->Get('tag');
-						$aTagValues = $oTag->GetLabels();
-						if (!empty($aTagValues)) {
-							$sTag = implode(' ', $aTagValues);
-							$sText .= $oLnk->Get('functionalci_name')." ".$sTag."\n";
+						$sCIFinalclass = $oLnk->Get('functionalci_finalclass');
+						if (in_array($sCIFinalclass, $oAnsibleAuthorizedCiSet)) {
+							/** @var \ormTagSet:: $oTag */
+							$oTag = $oLnk->Get('tag');
+							$aTagValues = $oTag->GetLabels();
+							if (!empty($aTagValues)) {
+								$sTag = implode(' ', $aTagValues);
+								$sText .= $oLnk->Get('functionalci_name')." ".$sTag."\n";
+							} else {
+								$sText .= $oLnk->Get('functionalci_name')."\n";
+							}
 						} else {
-							$sText .= $oLnk->Get('functionalci_name')."\n";
+							IssueLog::Warning("CI ".$oLnk->Get('functionalci_name')." has not been included in the inventory file because its class doesn't belong to the list of authorized classes.");
 						}
 					}
 				}
@@ -302,18 +330,27 @@ class _Ansible extends FunctionalCI
 			return [$sHostList, $iNbCIs, $sErrorMsg];
 		}
 
+		// Make sure the Set host FunctionalCIs
+		$sSetClass = $oHostByOQLSet->GetClass();
+		if (MetaModel::GetRootClass($sSetClass) != 'FunctionalCI') {
+			$sErrorMsg = 'The OQL doesn\'t provide Functional CIs';
+			IssueLog::Debug($sErrorMsg);
+
+			return [$sHostList, $iNbCIs, $sErrorMsg];
+		}
 		// Make sure that the requested attribute is part of the common class given by the set
 		$sCiClass = $oHostByOQLSet->GetClass();
 		if (!MetaModel::IsValidAttCode($sCiClass, $sAttribute)) {
 			$sErrorMsg = 'The requested attribute "'.$sAttribute.'" is not valid for the CI class "'.$sCiClass.'" resulting from the OQL.';
 		} else {
 			// Get set of CIs attached to the Ansible application
+			$oAnsibleAuthorizedCiSet = $this->GetFunctionalCIsAuthorizedInInventories();
 			if ($sInventory != '') {
-				$oAnsibleCiSet = $this->GetFunctionalCIsInInventory($sInventory);
+				$oAnsibleCiInventorySet = $this->GetFunctionalCIsInInventory($sInventory);
+				$oAnsibleCiSet = $oAnsibleCiInventorySet->CreateIntersect($oAnsibleAuthorizedCiSet);
 				$oHostSet = $oHostByOQLSet->CreateIntersect($oAnsibleCiSet);
 			} else {
-				$oAnsibleCiSet = $this->GetFunctionalCIsAuthorizedInInventories();
-				$oHostSet = $oHostByOQLSet->CreateIntersect($oAnsibleCiSet);
+				$oHostSet = $oHostByOQLSet->CreateIntersect($oAnsibleAuthorizedCiSet);
 			}
 			$iNbCIs = $oHostSet->Count();
 			$bFirstHost = true;
