@@ -673,6 +673,42 @@
     	return;
 	}]]></code>
         </method>
+        <method id="GetInitialStateAttributeFlags">
+          <static>false</static>
+          <access>public</access>
+          <type>Overload-DBObject</type>
+          <code><![CDATA[ public function GetInitialStateAttributeFlags($sAttCode, &$aReasons = array())
+	{
+		$iFlags = 0;
+		switch ($sAttCode) {
+			case 'tag':
+			    if (version_compare(ITOP_DESIGN_LATEST_VERSION, '3.1', '<')) {
+				    $iFlags |= OPT_ATT_HIDDEN;
+				}
+				break;
+		}
+
+		return $iFlags | parent::GetInitialStateAttributeFlags($sAttCode, $aReasons);
+    }]]></code>
+        </method>
+        <method id="GetAttributeFlags">
+          <static>false</static>
+          <access>public</access>
+          <type>Overload-DBObject</type>
+          <code><![CDATA[ public function GetAttributeFlags($sAttCode, &$aReasons = array(), $sTargetState = '')
+	{
+		$iFlags = 0;
+		switch ($sAttCode) {
+			case 'tag':
+			    if (version_compare(ITOP_DESIGN_LATEST_VERSION, '3.1', '<')) {
+				    $iFlags |= OPT_ATT_HIDDEN;
+				}
+				break;
+		}
+
+		return $iFlags | parent::GetAttributeFlags($sAttCode, $aReasons, $sTargetState);
+    }]]></code>
+        </method>
       </methods>
       <presentation>
         <details>
