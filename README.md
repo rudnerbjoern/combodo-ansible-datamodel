@@ -6,7 +6,7 @@ This extension allows you to integrate Ansible environment within iTop. It adds 
 that modelize Ansible inventories and provides dedicated web services to get them.
 
 Together with the [Ansible playbooks for iTop](https://store.itophub.io/en_US/products/combodo-ansible-playbooks) package 
-that provides you with playbooks that embed iTop web services, you'll be able to automate the creation of Ansible 
+that provides you with playbooks which embed iTop web services, you'll be able to automate the creation of Ansible 
 inventory files or ad-hoc lists of hosts for your playbooks.
 
 For more information about this module have a look at the
