@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.7">
+<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.2" load="strict">
   <classes>
     <class id="Ansible" _delta="define">
       <parent>FunctionalCI</parent>
@@ -22,7 +22,9 @@
             <attribute id="org_id"/>
           </attributes>
         </reconciliation>
-        <icon>asset/img/icons8-ansible.svg</icon>
+        <style>
+          <icon>asset/img/icons8-ansible.svg</icon>
+        </style>
       </properties>
       <fields>
         <field id="uuid" xsi:type="AttributeString">
@@ -33,10 +35,35 @@
         </field>
         <field id="status" xsi:type="AttributeEnum">
           <sql>status</sql>
+          <sort_type>rank</sort_type>
           <values>
-            <value id="production">production</value>
-            <value id="implementation">implementation</value>
-            <value id="obsolete">obsolete</value>
+            <value id="implementation">
+              <code>implementation</code>
+              <style>
+                <main_color>hsla(207, 72.6%, 57.1%, 1)</main_color>
+                <complementary_color>hsla(0, 0%, 100%, 1)</complementary_color>
+                <decoration_classes/>
+              </style>
+              <rank>10</rank>
+            </value>
+            <value id="production">
+              <code>production</code>
+              <style>
+                <main_color>hsla(88, 50.2%, 52.7%, 1)</main_color>
+                <complementary_color>hsla(0, 0%, 100%, 1)</complementary_color>
+                <decoration_classes/>
+              </style>
+              <rank>20</rank>
+            </value>
+            <value id="obsolete">
+              <code>obsolete</code>
+              <style>
+                <main_color>hsla(209, 23.7%, 74.3%, 1)</main_color>
+                <complementary_color>hsla(0, 0%, 100%, 1)</complementary_color>
+                <decoration_classes/>
+              </style>
+              <rank>30</rank>
+            </value>
           </values>
           <default_value/>
           <is_null_allowed>true</is_null_allowed>
@@ -228,7 +255,9 @@
             <attribute id="ansible_id"/>
           </attributes>
         </reconciliation>
-        <icon>asset/img/icons8-list-of-thumbnails.svg</icon>
+        <style>
+          <icon>asset/img/icons8-list-of-thumbnails.svg</icon>
+        </style>
       </properties>
       <fields>
         <field id="name" xsi:type="AttributeString">
@@ -319,27 +348,12 @@
 			$sCode = 'functionalci';
 			$oP->SetCurrentTab($sCode, $sName.$sCount, $sTitle);
 			$oBlock = new DisplayBlock($oSet->GetFilter(), 'list', false);
-    		if (version_compare(ITOP_DESIGN_LATEST_VERSION, '3.0', '<')) {
-			    $oP->p(MetaModel::GetClassIcon('FunctionalCI').'&nbsp;'.$sTitle);
-    			if ($iCount > 0) {
-	    			$oBlock = new DisplayBlock($oSet->GetFilter(), 'list');
-		    		$oBlock->Display($oP, $sCode, array('menu' => false));
-			    } else {
-				    $oP->p(Dict::S('UI:NoObjectToDisplay'));
-			    }
-		    } elseif (version_compare(ITOP_DESIGN_LATEST_VERSION, '3.1', '<')) {
-                $oClassIcon = new Combodo\iTop\Application\UI\Base\Component\MedallionIcon\MedallionIcon(MetaModel::GetClassIcon('FunctionalCI', false));
-                $oClassIcon->SetDescription($sTitle)->AddCSSClass('ibo-block-list--medallion');
-                $oP->AddUiBlock($oClassIcon);
-                $oBlock->Display($oP, 'blk-'.$sCode, array('menu' => false));
-            } else {
-                $oBlock->Display($oP, 'blk-'.$sCode, array(
-                    'menu' => false,
-                    'panel_title' => MetaModel::GetName('FunctionalCI'),
-                    'panel_title_tooltip' => $sTitle,
-                    'panel_icon' => MetaModel::GetClassIcon('FunctionalCI', false)
-                ));
-            }
+            $oBlock->Display($oP, 'blk-'.$sCode, array(
+                'menu' => false,
+                'panel_title' => MetaModel::GetName('FunctionalCI'),
+                'panel_title_tooltip' => $sTitle,
+                'panel_icon' => MetaModel::GetClassIcon('FunctionalCI', false)
+            ));
         }
 	}]]></code>
         </method>
@@ -413,7 +427,9 @@
             <attribute id="ansibleinventory_id"/>
           </attributes>
         </reconciliation>
-        <icon>asset/img/icons8-questionnaire.svg</icon>
+        <style>
+          <icon>asset/img/icons8-questionnaire.svg</icon>
+        </style>
         <uniqueness_rules>
           <rule id="name_inventory">
             <attributes>
@@ -581,9 +597,6 @@
             <attribute id="ansibleinventorygroup_name"/>
           </attributes>
         </naming>
-        <style>
-          <icon/>
-        </style>
         <reconciliation>
           <attributes>
             <attribute id="functionalci_id"/>
@@ -673,42 +686,6 @@
     	return;
 	}]]></code>
         </method>
-        <method id="GetInitialStateAttributeFlags">
-          <static>false</static>
-          <access>public</access>
-          <type>Overload-DBObject</type>
-          <code><![CDATA[ public function GetInitialStateAttributeFlags($sAttCode, &$aReasons = array())
-	{
-		$iFlags = 0;
-		switch ($sAttCode) {
-			case 'tag':
-			    if (version_compare(ITOP_DESIGN_LATEST_VERSION, '3.1', '<')) {
-				    $iFlags |= OPT_ATT_HIDDEN;
-				}
-				break;
-		}
-
-		return $iFlags | parent::GetInitialStateAttributeFlags($sAttCode, $aReasons);
-    }]]></code>
-        </method>
-        <method id="GetAttributeFlags">
-          <static>false</static>
-          <access>public</access>
-          <type>Overload-DBObject</type>
-          <code><![CDATA[ public function GetAttributeFlags($sAttCode, &$aReasons = array(), $sTargetState = '')
-	{
-		$iFlags = 0;
-		switch ($sAttCode) {
-			case 'tag':
-			    if (version_compare(ITOP_DESIGN_LATEST_VERSION, '3.1', '<')) {
-				    $iFlags |= OPT_ATT_HIDDEN;
-				}
-				break;
-		}
-
-		return $iFlags | parent::GetAttributeFlags($sAttCode, $aReasons, $sTargetState);
-    }]]></code>
-        </method>
       </methods>
       <presentation>
         <details>
@@ -760,7 +737,6 @@
       </fields>
     </class>
   </classes>
-  <dictionaries/>
   <menus>
     <menu id="ConfigManagement:Ansible" xsi:type="DashboardMenuNode" _delta="define">
       <rank>110</rank>

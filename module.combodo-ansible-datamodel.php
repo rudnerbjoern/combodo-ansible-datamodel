@@ -6,7 +6,7 @@
 
 SetupWebPage::AddModule(
 	__FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-	'combodo-ansible-datamodel/1.0.0',
+	'combodo-ansible-datamodel/1.0.1-dev',
 	array(
 		// Identification
 		//
@@ -16,7 +16,7 @@ SetupWebPage::AddModule(
 		// Setup
 		//
 		'dependencies' => array(
-			'itop-config-mgmt/2.7.0',
+			'itop-config-mgmt/3.2.0',
 		),
 		'mandatory' => false,
 		'visible' => true,
