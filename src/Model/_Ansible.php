@@ -23,7 +23,7 @@ class _Ansible extends FunctionalCI
 	 * @return CMDBObjectSet
 	 * @throws \OQLException
 	 */
-	private function GetInventoryGroups($sInventory, $iParentId)
+	private function GetInventoryGroups($sInventory, $iParentId): CMDBObjectSet
 	{
 		$sOQL = "SELECT AnsibleInventoryGroup AS ig WHERE ig.ansible_id = :id AND ig.ansibleinventory_name = :inventory AND ig.parent_id = :parent_id";
 		$oSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('id' => $this->GetKey(), 'inventory' => $sInventory, 'parent_id' => $iParentId));
@@ -37,7 +37,7 @@ class _Ansible extends FunctionalCI
 	 * @return CMDBObjectSet
 	 * @throws \OQLException
 	 */
-	private function GetInventoryGroupChildren($iInventoryGroupId)
+	private function GetInventoryGroupChildren($iInventoryGroupId): CMDBObjectSet
 	{
 		$sOQL = "SELECT AnsibleInventoryGroup AS ig WHERE ig.parent_id = :key";
 		$oSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('key' => $iInventoryGroupId));
@@ -51,7 +51,7 @@ class _Ansible extends FunctionalCI
 	 * @return CMDBObjectSet
 	 * @throws \OQLException
 	 */
-	private function GetlnkInventoryGroupToFunctionalCIs($iGroupId)
+	private function GetlnkInventoryGroupToFunctionalCIs($iGroupId): CMDBObjectSet
 	{
 		$sOQL = "SELECT lnkAnsibleInventoryGroupToCI AS l JOIN AnsibleInventoryGroup AS ig ON l.ansibleinventorygroup_id = ig.id WHERE ig.id = :groupid";
 		$oSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('groupid' => $iGroupId));
@@ -65,7 +65,7 @@ class _Ansible extends FunctionalCI
 	 * @return CMDBObjectSet
 	 * @throws \OQLException
 	 */
-	private function GetFunctionalCIsInInventory ($sInventory)
+	private function GetFunctionalCIsInInventory ($sInventory): CMDBObjectSet
 	{
 		$sOQL = "SELECT FunctionalCI AS f JOIN lnkAnsibleInventoryGroupToCI AS l ON l.functionalci_id = f.id JOIN AnsibleInventoryGroup AS g ON l.ansibleinventorygroup_id = g.id WHERE g.ansible_id = :id AND g.ansibleinventory_name = :name";
 		$oSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('id' => $this->GetKey(), 'name' => $sInventory));
@@ -74,9 +74,8 @@ class _Ansible extends FunctionalCI
 
 	/**
 	 * Get the default list of CIs allowed in inventories
-	 * @return string[]
 	 */
-	public static function GetDefaultFunctionalCIsInInventories()
+	public static function GetDefaultFunctionalCIsInInventories(): array
 	{
 		$aDefaultCIs = [
 			'Server',
@@ -89,10 +88,8 @@ class _Ansible extends FunctionalCI
 
 	/**
 	 * Get list of CI classes that are authorized in inventories
-	 *
-	 * @return string[]
 	 */
-	private function GetFunctionalCIClassesAuthorizedInInventories ()
+	private function GetFunctionalCIClassesAuthorizedInInventories (): array
 	{
 		$aCIClassesInInventoryGroupsParams = MetaModel::GetModuleSetting(ANSIBLE_MODULE_NAME, ANSIBLE_CI_CLASSES_IN_INVENTORYGROUPS, array());
 		if (!empty($aCIClassesInInventoryGroupsParams)) {
@@ -110,7 +107,7 @@ class _Ansible extends FunctionalCI
 	 * @return CMDBObjectSet
 	 * @throws \OQLException
 	 */
-	private function GetFunctionalCIsAuthorizedInInventories ()
+	private function GetFunctionalCIsAuthorizedInInventories (): CMDBObjectSet
 	{
 		$aCIClassesInInventoryGroups = $this->GetFunctionalCIClassesAuthorizedInInventories();
 
@@ -134,19 +131,19 @@ class _Ansible extends FunctionalCI
 		return $oSet;
 	}
 
-	/**
-	 * @param $oInventoryGroupSet
-	 * @param $sPadding
-	 * @return string
-	 * @throws \ArchivedObjectException
-	 * @throws \CoreException
-	 * @throws \CoreUnexpectedValue
-	 * @throws \MissingQueryArgument
-	 * @throws \MySQLException
-	 * @throws \MySQLHasGoneAwayException
-	 * @throws \OQLException
-	 */
-	private function GetYamlInventoryLevel($oInventoryGroupSet, $sPadding): string
+    /**
+     * @param $oInventoryGroupSet
+     * @param $sPadding
+     * @return string
+     * @throws \ArchivedObjectException
+     * @throws \CoreException
+     * @throws \CoreUnexpectedValue
+     * @throws \MissingQueryArgument
+     * @throws \MySQLException
+     * @throws \MySQLHasGoneAwayException
+     * @throws \OQLException
+     */
+    private function GetYamlInventoryLevel($oInventoryGroupSet, $sPadding): string
 	{
 		$sText = '';
 		while ($oInventoryGroup = $oInventoryGroupSet->Fetch()) {
@@ -164,7 +161,7 @@ class _Ansible extends FunctionalCI
 					if (in_array($sCIFinalclass, $oAnsibleAuthorizedCiSet)) {
 						$sText .= str_pad("", $sPadding + YAML_CIS_SPACE).$oLnk->Get('functionalci_name').":\n";
 						// Add tags if required
-						/** @var \ormTagSet:: $oTag */
+                        /** @var \ormTagSet $oTag */
 						$oTag = $oLnk->Get('tag');
 						$aTagValues = $oTag->GetLabels();
 						foreach ($aTagValues as $sTag) {
@@ -234,7 +231,7 @@ class _Ansible extends FunctionalCI
 					while ($oLnk = $oLnkSet->Fetch()) {
 						$sCIFinalclass = $oLnk->Get('functionalci_finalclass');
 						if (in_array($sCIFinalclass, $oAnsibleAuthorizedCiSet)) {
-							/** @var \ormTagSet:: $oTag */
+							/** @var \ormTagSet $oTag */
 							$oTag = $oLnk->Get('tag');
 							$aTagValues = $oTag->GetLabels();
 							if (!empty($aTagValues)) {

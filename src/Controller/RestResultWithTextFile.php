@@ -6,13 +6,13 @@
 
 namespace Combodo\iTop\Ansible\Controller;
 
+use Combodo\iTop\Ansible\Model\AnsibleObjectResult;
 use DBObject;
-use ObjectResult;
 use RestResult;
 
 class RestResultWithTextFile extends RestResult
 {
-	public $objects;
+	public array $objects;
 
 	/**
 	 * Report the given object
@@ -24,9 +24,9 @@ class RestResultWithTextFile extends RestResult
 	 *
 	 * @return void
 	 */
-	public function AddObject($iCode, $sMessage, $oObject, $sText) {
+	public function AddObject($iCode, string $sMessage, DBObject $oObject, $sText): void {
 		$sClass = get_class($oObject);
-		$oObjRes = new ObjectResult($sClass, $oObject->GetKey());
+		$oObjRes = new AnsibleObjectResult($sClass, $oObject->GetKey());
 		$oObjRes->code = $iCode;
 		$oObjRes->message = $sMessage;
 

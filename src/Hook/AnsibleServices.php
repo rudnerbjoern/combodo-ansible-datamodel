@@ -29,7 +29,7 @@ class AnsibleServices implements iRestServiceProvider
 	 * @param string $sVersion The version (e.g. 1.0) supported by the services
 	 * @return array An array of hash 'verb' => verb, 'description' => description
 	 */
-	public function ListOperations($sVersion)
+	public function ListOperations($sVersion): array
 	{
 		$aOps = array();
 		$aOps[] = array(
@@ -61,7 +61,7 @@ class AnsibleServices implements iRestServiceProvider
 	 * @throws \SimpleGraphException
 	 * @throws \Exception
 	 */
-	public function ExecOperation($sVersion, $sVerb, $aParams)
+	public function ExecOperation($sVersion, $sVerb, $aParams): RestResult
 	{
 		switch ($sVerb) {
 			case 'ansible/get_webservices_version':
